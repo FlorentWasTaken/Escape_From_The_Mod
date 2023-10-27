@@ -1,6 +1,6 @@
-"Escape From The Mod"
+"escape_from_the_mod"
 {
-    "base"          "base"
+    "base"          "sandbox"
     "title"         "Escape From The Mod"
     "maps"          "^gm_"
     "menusystem"    "1"

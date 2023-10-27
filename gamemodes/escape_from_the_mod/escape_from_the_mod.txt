@@ -1,0 +1,8 @@
+"Escape From The Mod"
+{
+    "base"          "base"
+    "title"         "Escape From The Mod"
+    "maps"          "^gm_"
+    "menusystem"    "1"
+    "workshopid"    "3062861647"
+}

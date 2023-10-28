@@ -3,7 +3,5 @@ local notHidden = {
 }
 
 hook.Add("HUDShouldDraw", "EFTM_gui:hook:client:hideHUD", function(name)
-	if !notHidden[ name ] then
-		return false
-	end
+	return notHidden[ name ] == false
 end)

@@ -16,16 +16,21 @@
 
 # 📰 Project description
 
-This repository is still work in progress. The goal is to create a Escape From Tarkov* like gamemode on Garry's mod*.
-I work on this project on my free time (I don't have a lot).
+This repository is still a work in progress. The goal is to create an 'Escape From Tarkov'-like game mode in Garry's Mod.
+I'm working on this project in my free time, which I don't have much of.
 
-- Escape From Tarkov is a hardcore surival FPS and I really enjoy this game.
-- Garry's mod is a sandbox game where you can code your own script.
+- **Escape From Tarkov** is a hardcore survival first-person shooter that I really enjoy.
+- **Garry's Mod** is a sandbox game where you can code your own scripts.
 
 ## 📚 Built with
 
 - ![Lua](https://img.shields.io/badge/lua-%232C2D72.svg?style=for-the-badge&logo=lua&logoColor=white)
 - ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
+
+# ⚙️ How to configure
+
+If you want to configure the gamemode, please refer to the `shared.lua` file, which is located in `gamemodes/escape_from_the_mod/gamemode`.
+I will create a better configuration system soon
 
 # 🔨 How to build
 

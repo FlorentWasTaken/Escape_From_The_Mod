@@ -3,5 +3,9 @@ local notHidden = {
 }
 
 hook.Add("HUDShouldDraw", "EFTM_gui:hook:client:hideHUD", function(name)
-	return notHidden[ name ] == false
+	return notHidden[name] == false
+end)
+
+hook.Add("ScoreboardShow", "EFTM_gui:hook:client:hideScoreboard", function()
+    return true
 end)

@@ -6,3 +6,7 @@ AddCSLuaFile("player/cl_stamina.lua")
 
 include("shared.lua")
 include("player/sv_stamina.lua")
+
+hook.Add("CanPlayerSuicide", "EFTM_gui:hook:server:DisableSuicide", function(ply)
+    return false
+end)

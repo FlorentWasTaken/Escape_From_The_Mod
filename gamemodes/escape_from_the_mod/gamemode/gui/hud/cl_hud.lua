@@ -9,3 +9,7 @@ end)
 hook.Add("ScoreboardShow", "EFTM_gui:hook:client:hideScoreboard", function()
     return true
 end)
+
+hook.Add("ContextMenuOpen", "EFTM_gui:hook:client:hideContextMenu", function()
+    return false
+end)

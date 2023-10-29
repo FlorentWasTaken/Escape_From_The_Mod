@@ -31,10 +31,11 @@ hook.Add("PlayerTick", "EFTM_player:hook:server:manageStamina", function(ply)
 	end
 
 	if !ply.LOW_STAMINA && ply.STAMINA <= 15 then
-		ply:SetJumpPower(ply.DEFAULT_JUMP * .5)
-		ply:SetRunSpeed(ply.DEFAULT_WALK)
 		ply.LOW_STAMINA = true
 		ply:EmitSound("EFTM_player:sound:server:lowStaminaBreath")
+	elseif ply.LOW_STAMINA && ply.STAMINA == 0 then
+		ply:SetJumpPower(ply.DEFAULT_JUMP * .5)
+		ply:SetRunSpeed(ply.DEFAULT_WALK)
 	elseif ply.LOW_STAMINA && ply.STAMINA > 15 then
 		ply:SetJumpPower(ply.DEFAULT_JUMP)
 		ply:SetRunSpeed(ply.DEFAULT_RUN)

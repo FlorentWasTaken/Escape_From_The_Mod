@@ -6,5 +6,5 @@ CreateClientConVar("EFTM_inventory:ccvar:client:openInventory", EFTM.Config.Defa
 local openInventoryKey = cvars.Number("EFTM_inventory:ccvar:client:openInventory", EFTM.Config.DefaultOpenInventory || KEY_I)
 
 hook.Add("PlayerButtonDown", "EFTM_inventory:hook:client:openInventory", function(ply, button)
-    if button ~= openInventoryKey then return end
+    if button != openInventoryKey then return end
 end)

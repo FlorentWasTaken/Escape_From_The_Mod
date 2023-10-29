@@ -10,20 +10,21 @@ sound.Add({
 })
 
 hook.Add("PlayerInitialSpawn", "EFTM_player:hook:server:setupStats", function(ply)
-	ply.DEFAULT_RUN = ply:GetRunSpeed() or 400
-	ply.DEFAULT_WALK = ply:GetWalkSpeed() or 200
-	ply.DEFAULT_JUMP = ply:GetJumpPower() or 200
+	ply.DEFAULT_RUN = ply:GetRunSpeed() || 400
+	ply.DEFAULT_WALK = ply:GetWalkSpeed() || 200
+	ply.DEFAULT_JUMP = ply:GetJumpPower() || 200
 	ply.STAMINA = 100
 end)
 
 hook.Add("PlayerTick", "EFTM_player:hook:server:manageStamina", function(ply)
     if !ply:Alive() then return end
+
 	if ply:IsSprinting() && ply:OnGround() && ply:GetVelocity():LengthSqr() >= ply.DEFAULT_RUN * ply.DEFAULT_RUN then
 		ply.STAMINA = math.Clamp(ply.STAMINA - .05, 0, 100)
 		net.Start("EFTM_player:net:server:updateStamina", true)
 			net.WriteFloat(ply.STAMINA)
 		net.Send(ply)
-	elseif !ply:IsSprinting() && ply.STAMINA ~= 100 then
+	elseif !ply:IsSprinting() && ply.STAMINA != 100 then
 		ply.STAMINA = math.Clamp(ply.STAMINA + .05, 0, 100)
 		net.Start("EFTM_player:net:server:updateStamina", true)
 			net.WriteFloat(ply.STAMINA)
@@ -56,7 +57,7 @@ hook.Add("KeyPress", "EFTM_player:hook:server:jumpManagement", function(ply, key
 end)
 
 hook.Add("PlayerDeath", "EFTM_player:hook:server:resetStamina", function(ply)
-	if ply.STAMINA ~= 100 then
+	if ply.STAMINA != 100 then
 		ply.STAMINA = 100
 		net.Start("EFTM_player:net:server:updateStamina", true)
 			net.WriteFloat(ply.STAMINA)

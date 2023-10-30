@@ -8,8 +8,8 @@ GM.Website  = _WEBSITE
 DeriveGamemode("sandbox")
 
 EFTM = {}
-EFTM.Config = {}
+EFTM.CONFIG = {}
 
 if CLIENT then
-    EFTM.Config.DefaultOpenInventory = KEY_I    // default key to open inventory
+    EFTM.CONFIG.DEFAULT_OPEN_INVENTORY = KEY_I    // default key to open inventory
 end

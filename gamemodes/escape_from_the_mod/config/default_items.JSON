@@ -4,5 +4,10 @@
         "vertical_size": 2,
         "type": "drinks",
         "durability": 60
+    },
+    "gpu": {
+        "horizontal_size": 2,
+        "vertical_size": 1,
+        "type": "electronics"
     }
 }

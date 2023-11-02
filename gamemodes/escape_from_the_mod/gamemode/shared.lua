@@ -1,5 +1,6 @@
 _VERSION = "VERSION 0.0.1"
 _WEBSITE = "https://github.com/FlorentWasTaken/Escape_From_The_Mod"
+_LANGUAGE = "en_US"
 
 GM.Name     = "Escape From The Mod"
 GM.Author   = "Florent"

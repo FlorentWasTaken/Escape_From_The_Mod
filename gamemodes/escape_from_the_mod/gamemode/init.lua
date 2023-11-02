@@ -8,6 +8,7 @@ AddCSLuaFile("player/spawn/cl_spawn.lua")
 include("shared.lua")
 include("player/stamina/sv_stamina.lua")
 include("player/spawn/sv_spawn.lua")
+include("item/sv_item.lua")
 
 local function loadSettings()
 	local map = game.GetMap()
@@ -26,8 +27,34 @@ local function loadSettings()
 	MsgC(Color(0, 200, 0), "Escape From The Mod:\nGamemode has successfully loaded\n")
 end
 
+local function loadLanguage()
+	local langPath = string.format("gamemodes/escape_from_the_mod/config/maps/%s.JSON", _LANGUAGE || "en_US")
+
+	if file.Exists(langPath, "GAME") && !file.IsDir(langPath, "GAME") then
+		local langConfigContent = file.Read(langPath, "GAME")
+
+		if (!langConfigContent || langConfigContent == "") && _LANGUAGE == "en_US" then
+			return MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo valid language file\n", _LANGUAGE))
+		elseif (!langConfigContent || langConfigContent == "") && _LANGUAGE ~= "en_US" then
+			MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo valid language file for %s switching to en_US\n", _LANGUAGE))
+			_LANGUAGE = "en_US"
+			return loadLanguage()
+		end
+	elseif _LANGUAGE ~= "en_US" then
+		MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo valid language file for %s switching to en_US\n", _LANGUAGE))
+		_LANGUAGE = "en_US"
+		return loadLanguage()
+	else
+		return MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo valid language file\n"))
+	end
+	EFTM.CONFIG.LANG = _LANGUAGE
+	MsgC(Color(0, 200, 0), "Escape From The Mod:\nLanguage has successfully loaded\n")
+end
+
 hook.Add("Initialize", "EFTM:hook:server:loadSettings", function()
 	loadSettings()
+	loadLanguage()
+	loadItems()
 end)
 
 HTTP({

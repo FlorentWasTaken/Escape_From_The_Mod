@@ -4,6 +4,18 @@ hook.Add("CanPlayerSuicide", "EFTM:hook:server:disableSuicide", function(ply)
     return false
 end)
 
+hook.Add("PlayerSpawnProp", "EFTM:hook:server:disablePropsSpawn", function(ply, _)
+    return false
+end)
+
+hook.Add("PlayerGiveSWEP", "EFTM:hook:server:disableWeaponGive", function(ply, _, _)
+    return false
+end)
+
+hook.Add("PlayerLoadout", "EFTM:hook:server:disableDefaultLoadout", function(ply)
+    return true
+end)
+
 net.Receive("EFTM_player:net:server:initFirstSpawn", function(len, ply)
     if ply.HAS_BEEN_INIT then return end
 

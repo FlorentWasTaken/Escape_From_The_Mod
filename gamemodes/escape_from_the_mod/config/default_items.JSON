@@ -1,0 +1,8 @@
+{
+    "water_bottle": {
+        "horizontal_size": 1,
+        "vertical_size": 2,
+        "type": "drinks",
+        "durability": 60
+    }
+}

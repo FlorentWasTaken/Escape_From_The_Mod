@@ -28,7 +28,7 @@ local function loadSettings()
 end
 
 local function loadLanguage()
-	local langPath = string.format("gamemodes/escape_from_the_mod/config/maps/%s.JSON", _LANGUAGE || "en_US")
+	local langPath = string.format("gamemodes/escape_from_the_mod/config/lang/%s.JSON", _LANGUAGE || "en_US")
 
 	if file.Exists(langPath, "GAME") && !file.IsDir(langPath, "GAME") then
 		local langConfigContent = file.Read(langPath, "GAME")

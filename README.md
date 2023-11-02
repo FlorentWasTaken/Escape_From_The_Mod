@@ -44,16 +44,18 @@ I will create a better configuration system soon
 
 Put this into your **start.bat** file :
 
-> @echo off
-> cls
-> echo Protecting srcds from crashes...
-> echo If you want to close srcds and this script, close the srcds window and type Y depending on your language followed by Enter.
-> title srcds.com Watchdog
-> :srcds
-> echo (%time%) srcds started.
-> start /wait srcds.exe -console -game garrysmod +map gm_flatgrass +maxplayers 8 +gamemode escape_from_the_mod +host_workshop_collection "3062861647" +r_hunkalloclightmaps 0
-> echo (%time%) WARNING: srcds closed or crashed, restarting.
-> goto srcds
+```
+@echo off
+cls
+echo Protecting srcds from crashes...
+echo If you want to close srcds and this script, close the srcds window and type Y depending on your language followed by Enter.
+title srcds.com Watchdog
+:srcds
+echo (%time%) srcds started.
+start /wait srcds.exe -console -game garrysmod +map gm_flatgrass +maxplayers 8 +gamemode escape_from_the_mod +host_workshop_collection "3062861647" +r_hunkalloclightmaps 0
+echo (%time%) WARNING: srcds closed or crashed, restarting.
+goto srcds
+```
 
 You can configure this file as you wish.
 

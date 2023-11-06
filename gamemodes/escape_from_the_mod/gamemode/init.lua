@@ -4,11 +4,13 @@ AddCSLuaFile("gui/hud/cl_hud.lua")
 AddCSLuaFile("gui/inventory/cl_inventory.lua")
 AddCSLuaFile("player/stamina/cl_stamina.lua")
 AddCSLuaFile("player/spawn/cl_spawn.lua")
+AddCSLuaFile("player/health/cl_health.lua")
 
 include("shared.lua")
 include("player/stamina/sv_stamina.lua")
 include("player/spawn/sv_spawn.lua")
 include("item/sv_item.lua")
+include("player/health/sv_health.lua")
 
 local function loadSettings()
 	local map = game.GetMap()

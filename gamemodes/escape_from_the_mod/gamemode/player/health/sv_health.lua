@@ -13,15 +13,14 @@ local boneReplacement = {
 local totalHealth = {
     ["head"] = {
         total = 35,
-        canBreak = false,
+        deadly = true,
     },
     ["thorax"] = {
         total = 85,
-        canBreak = false,
+        deadly = true,
     },
     ["stomach"] = {
         total = 70,
-        canBreak = false,
     },
     ["right-arm"] = {
         total = 60,
@@ -54,6 +53,33 @@ local function getBulletDirection(pos1, pos2, ply)
 
 	return tr.Hit, tr.HitBox
 end
+
+local function dealDamage(ply, zone, dmg)
+    local health = ply:Health()
+    local damage = dmg:GetDamage()
+    local zoneHealth = ply.EFTM.BODY[zone].life
+    local lastHealth = zoneHealth - damage
+
+    if lastHealth <= 0 && totalHealth[zone].deadly then
+        ply:SetHealth(0)
+    elseif lastHealth > 0 then
+        ply.EFTM.BODY[zone].life = lastHealth
+    end
+end
+
+hook.Add("PlayerSpawn", "EFTM:hook:server:setupPlayerHealth", function(ply)
+    ply:SetMaxHealth(440)
+    ply:SetHealth(440)
+    ply.EFTM.BODY = {
+        ["head"] = {life = totalHealth["head"].total, bleeding = false},
+        ["thorax"] = {life = totalHealth["thorax"].total, bleeding = false},
+        ["stomach"] = {life = totalHealth["stomach"].total, bleeding = false},
+        ["right-arm"] = {life = totalHealth["right-arm"].total, bleeding = false, broken = false},
+        ["left-arm"] = {life = totalHealth["left-arm"].total, bleeding = false, broken = false},
+        ["right-leg"] = {life = totalHealth["right-leg"].total, bleeding = false, broken = false},
+        ["left-leg"] = {life = totalHealth["left-leg"].total, bleeding = false, broken = false},
+    }
+end)
 
 hook.Add("EntityFireBullets", "EFTM:hook:server:manageDamageBullets", function(ent, data)
     if !ent:IsValid() then return end
@@ -93,7 +119,7 @@ hook.Add("EntityTakeDamage", "EFTM:hook:server:manageDamage", function(ent, dmg)
         local zone = ent:GetHitBoxHitGroup(hitbox, 0)
         local replacement = boneReplacement[zone]
 
-        if !replacement then return end
-
+        if !replacement then replacement = "stomach" return end
+        dealDamage(ent, replacement, dmg)
     end
 end)

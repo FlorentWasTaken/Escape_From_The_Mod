@@ -1,80 +1,43 @@
 local boneReplacement = {
-	["ValveBiped.Bip01_Neck1"] = "head",
-    ["ValveBiped.Bip01_Head1"] = "head",
-    ["ValveBiped.Bip01_Pelvis"] = "stomach",
-	["ValveBiped.Bip01_Spine"] = "thorax",
-	["ValveBiped.Bip01_Spine1"] = "thorax",
-    ["ValveBiped.Bip01_Spine2"] = "thorax",
-	["ValveBiped.Bip01_Spine4"] = "thorax",
-	["ValveBiped.Bip01_R_Clavicle"] = "thorax",
-	["ValveBiped.Bip01_L_Clavicle"] = "thorax",
-	["ValveBiped.Bip01_R_Shoulder"] = "right-arm",
-	["ValveBiped.Bip01_L_Shoulder"] = "left-arm",
-    ["ValveBiped.Bip01_R_Forearm"] = "right-arm",
-    ["ValveBiped.Bip01_L_Forearm"] = "left-arm",
-    ["ValveBiped.Bip01_R_Hand"] = "right-arm",
-    ["ValveBiped.Bip01_L_Hand"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger0"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger01"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger02"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger1"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger11"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger12"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger2"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger21"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger22"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger3"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger31"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger32"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger4"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger41"] = "left-arm",
-    ["ValveBiped.Bip01_L_Finger42"] = "left-arm",
-    ["ValveBiped.Bip01_R_Finger0"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger01"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger02"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger1"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger11"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger12"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger2"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger21"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger22"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger3"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger31"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger32"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger4"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger41"] = "right-arm",
-    ["ValveBiped.Bip01_R_Finger42"] = "right-arm",
-    ["ValveBiped.Bip01_R_Calf"] = "right-leg",
-    ["ValveBiped.Bip01_L_Calf"] = "left-leg",
-    ["ValveBiped.Bip01_R_Foot"] = "right-leg",
-    ["ValveBiped.Bip01_L_Foot"] = "left-leg",
-    ["ValveBiped.Bip01_R_Thigh"] = "right-leg",
-    ["ValveBiped.Bip01_L_Thigh"] = "left-leg",
-	["ValveBiped.Bip01_R_Toe0"] = "right-leg",
-	["ValveBiped.Bip01_L_Toe0"] = "left-leg"
+    [0] = "stomach",
+    [1] = "head",
+    [2] = "thorax",
+    [3] = "stomach",
+    [4] = "left-arm",
+    [5] = "right-arm",
+    [6] = "left-leg",
+    [7] = "right-leg",
+    [8] = "stomach"
 }
 
 local totalHealth = {
     ["head"] = {
         total = 35,
+        canBreak = false,
     },
     ["thorax"] = {
         total = 85,
+        canBreak = false,
     },
     ["stomach"] = {
         total = 70,
+        canBreak = false,
     },
     ["right-arm"] = {
         total = 60,
+        canBreak = true,
     },
     ["left-arm"] = {
         total = 60,
+        canBreak = true,
     },
     ["right-leg"] = {
         total = 65,
+        canBreak = true,
     },
     ["left-leg"] = {
         total = 65,
+        canBreak = true,
     }
 }
 
@@ -110,7 +73,7 @@ hook.Add("EntityTakeDamage", "EFTM:hook:server:manageDamage", function(ent, dmg)
     local len = #firedBullets
     local dir = nil
 
-    for i = len, len, -1 do
+    for i = len, 0, -1 do
         local tab = firedBullets[i]
 
         if !tab then continue end
@@ -127,9 +90,10 @@ hook.Add("EntityTakeDamage", "EFTM:hook:server:manageDamage", function(ent, dmg)
     local hitboxbone = ent:GetHitBoxBone(hitbox, 0)
 
     if hit and hitboxbone != nil then
-        local bone = ent:GetBoneName(hitboxbone)
+        local zone = ent:GetHitBoxHitGroup(hitbox, 0)
+        local replacement = boneReplacement[zone]
 
-        if !boneReplacement[bone] then return end
-        // damage function here
+        if !replacement then return end
+
     end
 end)

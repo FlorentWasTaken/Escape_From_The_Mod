@@ -17,7 +17,8 @@ hook.Add("PlayerLoadout", "EFTM:hook:server:disableDefaultLoadout", function(ply
 end)
 
 net.Receive("EFTM_player:net:server:initFirstSpawn", function(len, ply)
-    if ply.HAS_BEEN_INIT then return end
+    ply.EFTM = ply.EFTM || {}
+    if ply.EFTM.HAS_BEEN_INIT then return end
 
     local hideoutLocation = EFTM.CONFIG.MAP.hideout_location || {x = 0, y = 0, z = 0, w = 0}
     local pos = Vector(hideoutLocation.x || 0, hideoutLocation.y || 0, hideoutLocation.z || 0)
@@ -25,5 +26,5 @@ net.Receive("EFTM_player:net:server:initFirstSpawn", function(len, ply)
 
     ply:SetPos(pos)
     ply:SetEyeAngles(rot)
-    ply.HAS_BEEN_INIT = true
+    ply.EFTM.HAS_BEEN_INIT = true
 end)

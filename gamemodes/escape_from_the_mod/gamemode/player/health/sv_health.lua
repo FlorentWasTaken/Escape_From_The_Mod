@@ -151,6 +151,9 @@ hook.Add("Initialize", "EFTM:hook:server:manageBleeding", function()
                     end
                 end
                 ply:SetHealth(ply:Health() - 1)
+                if ply:Health() <= 0 then
+                    ply:Kill()
+                end
             end
         end
     end)

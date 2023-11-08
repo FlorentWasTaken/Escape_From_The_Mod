@@ -16,6 +16,26 @@ hook.Add("PlayerLoadout", "EFTM:hook:server:disableDefaultLoadout", function(ply
     return true
 end)
 
+hook.Add("CanPlayerEnterVehicle", "EFTM:hook:server:disableVehicleEntering", function(ply, _, _)
+    return false
+end)
+
+hook.Add("AllowPlayerPickup", "EFTM:hook:server:disablePickup", function(ply, _)
+    return false
+end)
+
+hook.Add("PlayerCanPickupItem", "EFTM:hook:server:disableItemPickup", function(ply, _)
+    return false
+end)
+
+hook.Add("PlayerCanPickupWeapon", "EFTM:hook:server:disableWeaponPickup", function(ply, _)
+    return false
+end)
+
+hook.Add("PlayerDeathSound", "EFTM:hook:server:muteDeathSound", function(ply)
+    return true
+end)
+
 net.Receive("EFTM_player:net:server:initFirstSpawn", function(len, ply)
     ply.EFTM = ply.EFTM || {}
     if ply.EFTM.HAS_BEEN_INIT then return end

@@ -65,11 +65,18 @@ local function dealDamage(ply, zone, dmg)
     elseif lastHealth > 0 then
         ply.EFTM.BODY[zone].life = lastHealth
     end
+    if !ply.EFTM.BODY[zone].bleeding then
+        ply.EFTM.BODY[zone].bleeding = math.random(1, 10) <= 2
+        if ply.EFTM.BODY[zone].bleeding then
+            ply.EFTM.BLEEDING = true
+        end
+    end
 end
 
-hook.Add("PlayerSpawn", "EFTM:hook:server:setupPlayerHealth", function(ply)
+hook.Add("PlayerSpawn", "EFTM:hook:server:setupPlayerHealth", function(ply, _)
     ply:SetMaxHealth(440)
     ply:SetHealth(440)
+    ply.EFTM.BLEEDING = false
     ply.EFTM.BODY = {
         ["head"] = {life = totalHealth["head"].total, bleeding = false},
         ["thorax"] = {life = totalHealth["thorax"].total, bleeding = false},
@@ -122,4 +129,29 @@ hook.Add("EntityTakeDamage", "EFTM:hook:server:manageDamage", function(ent, dmg)
         if !replacement then replacement = "stomach" return end
         dealDamage(ent, replacement, dmg)
     end
+end)
+
+hook.Add("Initialize", "EFTM:hook:server:manageBleeding", function()
+    timer.Create("EFTM:timer:server:manageBleeding", 6, 0, function()
+        local players = player.GetAll()
+
+        for _, ply in ipairs(players) do
+            if !IsValid(ply) || !ply.EFTM.BLEEDING then continue end
+            for k, v in pairs(ply.EFTM.BODY) do
+                if !v.bleeding then continue end
+                local partHealth = v.life
+
+                if partHealth - 1 >= 0 then
+                    ply.EFTM.BODY[k].life = partHealth - 1
+                else
+                    for i, j in pairs(ply.EFTM.BODY) do
+                        if j.life > 0 then
+                            ply.EFTM.BODY[i].life = j.life - 1
+                        end
+                    end
+                end
+                ply:SetHealth(ply:Health() - 1)
+            end
+        end
+    end)
 end)

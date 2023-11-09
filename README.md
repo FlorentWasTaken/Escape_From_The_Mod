@@ -61,8 +61,8 @@ You can configure this file as you wish.
 
 **Follow these steps if you have a gmod server :**
 
-- Download or clone the repository in the **GarrysModDS** folder
-- Extract every files from the folder named **Escape_From_The_Mod** into **GarrysModDS**
+- Download or clone the repository in the **GarrysModDS/garrysmod/** folder
+- Extract every files from the folder named **Escape_From_The_Mod** into **garrysmod/**
 - Set the gamemode to **escape_from_the_mod** in your **start.bat** file (see previous steps)
 
 # 📡 How to contribute

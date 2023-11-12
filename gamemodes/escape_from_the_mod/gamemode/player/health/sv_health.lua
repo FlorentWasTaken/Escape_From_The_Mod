@@ -95,7 +95,7 @@ local function dealDamage(ply, zone, dmg)
     local lastHealth = zoneHealth - damage
 
     if lastHealth <= 0 && totalHealth[zone].deadly then
-        ply:SetHealth(0)
+        ply:Kill()
     elseif lastHealth > 0 then
         ply.EFTM.BODY[zone].life = lastHealth
         bleedTest(ply, zone)
@@ -118,7 +118,7 @@ local function dealDamage(ply, zone, dmg)
                 local newHealth = math.Clamp(v.life - damage, 0, v.life)
 
                 ply.EFTM.BODY[k].life = newHealth
-                damage = damage  - v.life
+                damage = damage - v.life
                 if newHealth == 0 && v.deadly then
                     return ply:Kill()
                 end

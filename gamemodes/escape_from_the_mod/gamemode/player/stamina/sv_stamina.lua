@@ -15,6 +15,7 @@ hook.Add("PlayerInitialSpawn", "EFTM_player:hook:server:setupStats", function(pl
 	ply.EFTM.DEFAULT_WALK = ply:GetWalkSpeed() || 200
 	ply.EFTM.DEFAULT_JUMP = ply:GetJumpPower() || 200
 	ply.EFTM.STAMINA = 100
+	ply.EFTM.STAMINA_REGEN = .05
 end)
 
 hook.Add("PlayerTick", "EFTM_player:hook:server:manageStamina", function(ply)
@@ -26,7 +27,7 @@ hook.Add("PlayerTick", "EFTM_player:hook:server:manageStamina", function(ply)
 			net.WriteFloat(ply.EFTM.STAMINA)
 		net.Send(ply)
 	elseif !ply:IsSprinting() && ply.EFTM.STAMINA != 100 then
-		ply.EFTM.STAMINA = math.Clamp(ply.EFTM.STAMINA + .05, 0, 100)
+		ply.EFTM.STAMINA = math.Clamp(ply.EFTM.STAMINA + ply.EFTM.STAMINA_REGEN, 0, 100)
 		net.Start("EFTM_player:net:server:updateStamina", true)
 			net.WriteFloat(ply.EFTM.STAMINA)
 		net.Send(ply)
@@ -65,5 +66,6 @@ hook.Add("PlayerDeath", "EFTM_player:hook:server:resetStamina", function(ply)
 		net.Send(ply)
 		ply.EFTM.LOW_STAMINA = false
 	end
+	ply.EFTM.STAMINA_REGEN = .05
 	ply:StopSound("EFTM_player:sound:server:lowStaminaBreath")
 end)

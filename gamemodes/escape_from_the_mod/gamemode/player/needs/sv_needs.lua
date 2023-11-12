@@ -30,7 +30,7 @@ hook.Add("Initialize", "EFTM:hook:server:manageNeeds", function()
                 ply.EFTM.NEEDS.hunger = 0
             end
 
-            if thirst - (rate + 1) => 0 then
+            if thirst - (rate + 1) >= 0 then
                 ply.EFTM.NEEDS.thirst = thirst - (rate + 1)
             else
                 ply.EFTM.NEEDS.thirst = 0

@@ -1,3 +1,6 @@
+util.AddNetworkString("EFTM_player:net:server:updateHealth")
+util.AddNetworkString("EFTM_player:net:server:updateBleedingState")
+
 local boneReplacement = {
     [1] = "head",
     [2] = "thorax",
@@ -46,9 +49,6 @@ local totalHealth = {
 }
 
 local firedBullets = {}
-
-util.AddNetworkString("EFTM_player:net:server:updateHealth")
-util.AddNetworkString("EFTM_player:net:server:updateBleedingState")
 
 local function getBulletDirection(pos1, pos2, ply)
 	local trace = {

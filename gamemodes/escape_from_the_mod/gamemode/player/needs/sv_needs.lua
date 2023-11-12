@@ -20,6 +20,7 @@ local function dealNeedsDamage(ply, dmg)
             end
             ply.EFTM.BODY[k].life = newHealth
             ply:SetHealth(life - dmg)
+            updatePartHealth(ply, k, newHealth)
             break
         else
             local newHealth = math.Clamp(v.life - dmg, 0, v.life)
@@ -32,6 +33,7 @@ local function dealNeedsDamage(ply, dmg)
             ply.EFTM.BODY[k].life = newHealth
             dmg = dmg - v.life
             ply:SetHealth(life - dealedDamage)
+            updatePartHealth(ply, k, newHealth)
         end
     end
 end

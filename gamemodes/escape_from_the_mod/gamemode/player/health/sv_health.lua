@@ -62,7 +62,7 @@ local function getBulletDirection(pos1, pos2, ply)
 	return tr.Hit, tr.HitBox
 end
 
-local function updatePartHealth(ply, zone, health)
+function updatePartHealth(ply, zone, health)
     if !IsValid(ply) || !boneReplacement[zone] || health < 0 then return end
 
     net.Start("EFTM_player:net:server:updateHealth")

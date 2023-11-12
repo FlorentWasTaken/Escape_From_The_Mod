@@ -20,13 +20,20 @@ hook.Add("Initialize", "EFTM:hook:server:manageNeeds", function()
 
         for _, ply in ipairs(players) do
             if !IsValid(ply) || !ply.EFTM.NEEDS then continue end
+            local rate = (ply.EFTM.BODY.stomach.life == 0 && 5) || 1
+            local hunger = ply.EFTM.NEEDS.hunger
+            local thirst = ply.EFTM.NEEDS.thirst
 
-            if ply.EFTM.NEEDS.hunger > 0 then
-                ply.EFTM.NEEDS.hunger = ply.EFTM.NEEDS.hunger - 1
+            if hunger - rate >= 0 then
+                ply.EFTM.NEEDS.hunger = hunger - rate
+            else
+                ply.EFTM.NEEDS.hunger = 0
             end
 
-            if ply.EFTM.NEEDS.thirst > 0 then
-                ply.EFTM.NEEDS.thirst = ply.EFTM.NEEDS.thirst - 1
+            if thirst - (rate + 1) => 0 then
+                ply.EFTM.NEEDS.thirst = thirst - (rate + 1)
+            else
+                ply.EFTM.NEEDS.thirst = 0
             end
         end
     end)

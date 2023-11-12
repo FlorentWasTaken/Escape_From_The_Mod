@@ -22,13 +22,13 @@ PLAYER_BODY = {}
 
 local function resetHealth()
     PLAYER_BODY = {
-        ["head"] = {life = totalHealth["head"].total, bleeding = false},
-        ["thorax"] = {life = totalHealth["thorax"].total, bleeding = false},
-        ["stomach"] = {life = totalHealth["stomach"].total, bleeding = false},
-        ["right-arm"] = {life = totalHealth["right-arm"].total, bleeding = false, broken = false},
-        ["left-arm"] = {life = totalHealth["left-arm"].total, bleeding = false, broken = false},
-        ["right-leg"] = {life = totalHealth["right-leg"].total, bleeding = false, broken = false},
-        ["left-leg"] = {life = totalHealth["left-leg"].total, bleeding = false, broken = false},
+        ["head"] = {life = totalHealth["head"], bleeding = false},
+        ["thorax"] = {life = totalHealth["thorax"], bleeding = false},
+        ["stomach"] = {life = totalHealth["stomach"], bleeding = false},
+        ["right-arm"] = {life = totalHealth["right-arm"], bleeding = false, broken = false},
+        ["left-arm"] = {life = totalHealth["left-arm"], bleeding = false, broken = false},
+        ["right-leg"] = {life = totalHealth["right-leg"], bleeding = false, broken = false},
+        ["left-leg"] = {life = totalHealth["left-leg"], bleeding = false, broken = false},
     }
 end
 resetHealth()

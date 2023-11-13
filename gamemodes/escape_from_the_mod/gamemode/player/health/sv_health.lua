@@ -1,5 +1,6 @@
 util.AddNetworkString("EFTM_player:net:server:updateHealth")
 util.AddNetworkString("EFTM_player:net:server:updateBleedingState")
+util.AddNetworkString("EFTM_player:net:server:updateBrokenState")
 
 local boneReplacement = {
     [1] = "head",
@@ -66,8 +67,8 @@ function updatePartHealth(ply, zone, health)
     if !IsValid(ply) || !boneReplacement[zone] || health < 0 then return end
 
     net.Start("EFTM_player:net:server:updateHealth")
-        net.WriteUInt(totalHealth[zone].index)
-        net.WriteUInt(health)
+        net.WriteUInt(totalHealth[zone].index, 3)
+        net.WriteUInt(health, 7)
     net.Send(ply)
 end
 
@@ -75,20 +76,38 @@ local function updateBleedingState(ply, zone, status)
     if !IsValid(ply) || !boneReplacement[zone] then return end
 
     net.Start("EFTM_player:net:server:updateBleedingState")
-        net.WriteUInt(totalHealth[zone].index)
+        net.WriteUInt(totalHealth[zone].index, 3)
+        net.WriteBool(status)
+    net.Send(ply)
+end
+
+local function updateBrokenState(ply, zone, status)
+    if !IsValid(ply) || !boneReplacement[zone] then return end
+
+    net.Start("EFTM_player:net:server:updateBrokenState")
+        net.WriteUInt(totalHealth[zone].index, 3)
         net.WriteBool(status)
     net.Send(ply)
 end
 
 local function bleedTest(ply, zone)
-    if !ply.EFTM.BODY[zone].bleeding && math.random(1, 10) <= 2 then
-        ply.EFTM.BLEEDING = true
-        ply.EFTM.BODY[zone].bleeding = true
-        updateBleedingState(ply, zone, true)
-    end
+    if ply.EFTM.BODY[zone].bleeding || math.random(1, 10) > 2 then return end
+
+    ply.EFTM.BLEEDING = true
+    ply.EFTM.BODY[zone].bleeding = true
+    updateBleedingState(ply, zone, true)
 end
 
-local function dealDamage(ply, zone, dmg)
+local function breakTest(ply, zone)
+    if !totalHealth[zone].canBreak || ply.EFTM.BODY[zone].broken || math.random(1, 10) > 2 then return end
+
+    ply.EFTM.BODY[zone].broken = true
+    ply:SetRunSpeed(ply:GetRunSpeed() - ply.EFTM.DEFAULT_RUN * .2)
+    ply:SetWalkSpeed(ply:GetWalkSpeed() - ply.EFTM.DEFAULT_WALK * .1)
+    updateBrokenState(ply, zone, true)
+end
+
+local function dealDamage(ply, zone, dmg, ignoreBleeding)
     local health = ply:Health()
     local damage = dmg:GetDamage()
     local zoneHealth = ply.EFTM.BODY[zone].life
@@ -98,7 +117,8 @@ local function dealDamage(ply, zone, dmg)
         ply:Kill()
     elseif lastHealth > 0 then
         ply.EFTM.BODY[zone].life = lastHealth
-        bleedTest(ply, zone)
+        if !ignoreBleeding then bleedTest(ply, zone) end
+        breakTest(ply, zone)
         updatePartHealth(ply, zone, lastHealth)
     elseif lastHealth <= 0 then
         for k, v in pairs(ply.EFTM.BODY) do
@@ -112,7 +132,8 @@ local function dealDamage(ply, zone, dmg)
                     return ply:Kill()
                 end
                 updatePartHealth(ply, k, newHealth)
-                bleedTest(ply, k)
+                if !ignoreBleeding then bleedTest(ply, k) end
+                breakTest(ply, k)
                 break
             else
                 local newHealth = math.Clamp(v.life - damage, 0, v.life)
@@ -123,7 +144,8 @@ local function dealDamage(ply, zone, dmg)
                     return ply:Kill()
                 end
                 updatePartHealth(ply, k, newHealth)
-                bleedTest(ply, k)
+                if !ignoreBleeding then bleedTest(ply, k) end
+                breakTest(ply, k)
             end
         end
     end
@@ -185,6 +207,16 @@ hook.Add("EntityTakeDamage", "EFTM:hook:server:manageDamage", function(ent, dmg)
         if !replacement then replacement = "stomach" return end
         dealDamage(ent, replacement, dmg)
     end
+end)
+
+hook.Add("GetFallDamage", "EFTM:hook:server:manageFallDamage", function(ply, speed)
+    local damage = math.floor(speed / 8)
+
+    if damage % 2 ~= 0 then damage = damage + 1 end
+
+    dealDamage(ply, "left-leg", damage * .5, true)
+    dealDamage(ply, "right-leg", damage * .5, true)
+    return damage
 end)
 
 hook.Add("Initialize", "EFTM:hook:server:manageBleeding", function()

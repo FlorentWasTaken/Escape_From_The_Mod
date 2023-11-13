@@ -50,3 +50,12 @@ net.Receive("EFTM_player:net:server:updateBleedingState", function(len)
     if !zone then return end
     PLAYER_BODY[zone].bleeding = newStatus
 end)
+
+net.Receive("EFTM_player:net:server:updateBrokenState", function(len)
+    local part = net.ReadUInt(3)
+    local newStatus = net.ReadBool()
+    local zone = boneReplacement[part]
+
+    if !zone then return end
+    PLAYER_BODY[zone].broken = newStatus
+end)

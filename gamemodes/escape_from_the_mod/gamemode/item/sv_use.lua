@@ -21,6 +21,6 @@ net.Receive("EFTM_item:net:server:useItem", function(len, ply)
     local param = net.ReadUInt(4)
     local item = ply:getItemByPos(itemPos)
 
-    if !item || !item:useable() then return end
+    if not item or not item:useable() then return end
     item.use(item, ply, param)
 end)

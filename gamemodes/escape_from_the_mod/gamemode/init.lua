@@ -21,12 +21,12 @@ local function loadSettings()
 	local map = game.GetMap()
 	local mapPath = string.format("gamemodes/escape_from_the_mod/config/maps/%s.JSON", map)
 
-	if !file.Exists(mapPath, "GAME") || file.IsDir(mapPath, "GAME") then
+	if not file.Exists(mapPath, "GAME") or file.IsDir(mapPath, "GAME") then
 		return MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo config file for %s\n", map))
 	end
 	local mapConfigContent = file.Read(mapPath, "GAME")
 
-	if !mapConfigContent || mapConfigContent == "" then
+	if not mapConfigContent or mapConfigContent == "" then
 		return MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo valid config file for %s\n", map))
 	end
 
@@ -35,14 +35,14 @@ local function loadSettings()
 end
 
 local function loadLanguage()
-	local langPath = string.format("gamemodes/escape_from_the_mod/config/lang/%s.JSON", _LANGUAGE || "en_US")
+	local langPath = string.format("gamemodes/escape_from_the_mod/config/lang/%s.JSON", _LANGUAGE or "en_US")
 
-	if file.Exists(langPath, "GAME") && !file.IsDir(langPath, "GAME") then
+	if file.Exists(langPath, "GAME") && not file.IsDir(langPath, "GAME") then
 		local langConfigContent = file.Read(langPath, "GAME")
 
-		if (!langConfigContent || langConfigContent == "") && _LANGUAGE == "en_US" then
+		if (not langConfigContent or langConfigContent == "") && _LANGUAGE == "en_US" then
 			return MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo valid language file\n", _LANGUAGE))
-		elseif (!langConfigContent || langConfigContent == "") && _LANGUAGE ~= "en_US" then
+		elseif (not langConfigContent or langConfigContent == "") && _LANGUAGE ~= "en_US" then
 			MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo valid language file for %s switching to en_US\n", _LANGUAGE))
 			_LANGUAGE = "en_US"
 			return loadLanguage()
@@ -69,9 +69,9 @@ HTTP({
 		MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nHTTP request failed %s\n", reason))
 	end,
 	success = function(code, body, headers)
-		if code != 200 then
+		if code ~= 200 then
             return MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nHTTP request failed %d\n", code))
-        elseif body != _VERSION then
+        elseif body ~= _VERSION then
             MsgC(Color(201, 168, 25), string.format("Escape From The Mod:\nA new update is available !\nPlease download the new version:\n%s\n", _WEBSITE))
         end
 	end,

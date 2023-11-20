@@ -9,22 +9,22 @@ Item = {}
 function Item:new(name)
     local obj = {}
 
-    if !EFTM.CONFIG.ITEMS || !EFTM.CONFIG.ITEMS[name] then return nil end
+    if not EFTM.CONFIG.ITEMS or not EFTM.CONFIG.ITEMS[name] then return nil end
     local cfg = EFTM.CONFIG.ITEMS[name]
 
     setmetatable(obj, self)
     self.__index = self
     obj.name = cfg.name
     obj.type = cfg.type
-    obj.durability = cfg.durability && tonumber(cfg.durability) || -1
-    obj.horizontal = cfg.horizontal_size && tonumber(cfg.horizontal_size) || 1
-    obj.vertical = cfg.vertical_size && tonumber(cfg.vertical_size) || 1
-    obj.use = useableType[cfg.type] || nil
+    obj.durability = cfg.durability and tonumber(cfg.durability) or -1
+    obj.horizontal = cfg.horizontal_size and tonumber(cfg.horizontal_size) or 1
+    obj.vertical = cfg.vertical_size and tonumber(cfg.vertical_size) or 1
+    obj.use = useableType[cfg.type] or nil
     return obj
 end
 
 function Item:durability(durability)
-    if !durability || type(durability) ~= "number" || durability < 0 then
+    if not durability or type(durability) ~= "number" or durability < 0 then
         return durability
     end
 
@@ -40,19 +40,19 @@ function Item:debug()
 end
 
 function Item:useable()
-    if !useableType[self.type] then return false end
+    if not useableType[self.type] then return false end
     return true
 end
 
 function loadItems()
 	local itemPath = string.format("gamemodes/escape_from_the_mod/config/%s.JSON", _ITEMS)
 
-	if !file.Exists(itemPath, "GAME") || file.IsDir(itemPath, "GAME") then
+	if not file.Exists(itemPath, "GAME") or file.IsDir(itemPath, "GAME") then
 		return MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo items config file for %s\n", _ITEMS))
 	end
 	local itemConfigContent = file.Read(itemPath, "GAME")
 
-	if !itemConfigContent || itemConfigContent == "" then
+	if not itemConfigContent or itemConfigContent == "" then
 		return MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo valid items config file for %s\n", _ITEMS))
 	end
 

@@ -15,7 +15,7 @@ local function dealNeedsDamage(ply, dmg)
             local newHealth = v.life - dmg
             local life = ply:Health()
 
-            if (newHealth == 0 && v.deadly) || life - newHealth <= 0 then
+            if (newHealth == 0 and v.deadly) or life - newHealth <= 0 then
                 return ply:Kill()
             end
             ply.EFTM.BODY[k].life = newHealth
@@ -27,7 +27,7 @@ local function dealNeedsDamage(ply, dmg)
             local life = ply:Health()
             local dealedDamage = v.life - newHealth
 
-            if (newHealth == 0 && v.deadly) || life - dealedDamage <= 0 then
+            if (newHealth == 0 and v.deadly) or life - dealedDamage <= 0 then
                 return ply:Kill()
             end
             ply.EFTM.BODY[k].life = newHealth
@@ -50,8 +50,8 @@ hook.Add("Initialize", "EFTM:hook:server:manageNeeds", function()
         local players = player.GetAll()
 
         for _, ply in ipairs(players) do
-            if !IsValid(ply) || !ply.EFTM.NEEDS then continue end
-            local rate = (ply.EFTM.BODY.stomach.life == 0 && 5) || 1
+            if not IsValid(ply) or not ply.EFTM.NEEDS then continue end
+            local rate = (ply.EFTM.BODY.stomach.life == 0 and 5) or 1
             local hunger = ply.EFTM.NEEDS.hunger
             local thirst = ply.EFTM.NEEDS.thirst
 
@@ -75,13 +75,13 @@ hook.Add("Initialize", "EFTM:hook:server:manageNeeds", function()
         local players = player.GetAll()
 
         for _, ply in ipairs(players) do
-            if !IsValid(ply) || !ply.EFTM.NEEDS then continue end
+            if not IsValid(ply) or not ply.EFTM.NEEDS then continue end
             local hunger = ply.EFTM.NEEDS.hunger
             local thirst = ply.EFTM.NEEDS.thirst
 
-            if hunger == 0 && thirst == 0 then
+            if hunger == 0 and thirst == 0 then
                 dealNeedsDamage(ply, 2)
-            elseif hunger == 0 || thirst == 0 then
+            elseif hunger == 0 or thirst == 0 then
                 dealNeedsDamage(ply, 1)
             end
         end

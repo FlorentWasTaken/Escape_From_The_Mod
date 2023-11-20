@@ -37,12 +37,12 @@ hook.Add("PlayerDeathSound", "EFTM:hook:server:muteDeathSound", function(ply)
 end)
 
 net.Receive("EFTM_player:net:server:initFirstSpawn", function(len, ply)
-    ply.EFTM = ply.EFTM || {}
+    ply.EFTM = ply.EFTM or {}
     if ply.EFTM.HAS_BEEN_INIT then return end
 
-    local hideoutLocation = EFTM.CONFIG.MAP.hideout_location || {x = 0, y = 0, z = 0, w = 0}
-    local pos = Vector(hideoutLocation.x || 0, hideoutLocation.y || 0, hideoutLocation.z || 0)
-    local rot = Angle(0, hideoutLocation.w || 180, 0)
+    local hideoutLocation = EFTM.CONFIG.MAP.hideout_location or {x = 0, y = 0, z = 0, w = 0}
+    local pos = Vector(hideoutLocation.x or 0, hideoutLocation.y or 0, hideoutLocation.z or 0)
+    local rot = Angle(0, hideoutLocation.w or 180, 0)
 
     ply:SetPos(pos)
     ply:SetEyeAngles(rot)

@@ -38,7 +38,7 @@ net.Receive("EFTM_player:net:server:updateHealth", function(len)
     local newHealth = net.ReadUInt(7)
     local zone = boneReplacement[part]
 
-    if !zone then return end
+    if not zone then return end
     PLAYER_BODY[zone].life = newHealth
 end)
 
@@ -47,7 +47,7 @@ net.Receive("EFTM_player:net:server:updateBleedingState", function(len)
     local newStatus = net.ReadBool()
     local zone = boneReplacement[part]
 
-    if !zone then return end
+    if not zone then return end
     PLAYER_BODY[zone].bleeding = newStatus
 end)
 
@@ -56,6 +56,6 @@ net.Receive("EFTM_player:net:server:updateBrokenState", function(len)
     local newStatus = net.ReadBool()
     local zone = boneReplacement[part]
 
-    if !zone then return end
+    if not zone then return end
     PLAYER_BODY[zone].broken = newStatus
 end)

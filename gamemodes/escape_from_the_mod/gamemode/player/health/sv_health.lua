@@ -64,7 +64,7 @@ local function getBulletDirection(pos1, pos2, ply)
 end
 
 function updatePartHealth(ply, zone, health)
-    if !IsValid(ply) || !boneReplacement[zone] || health < 0 then return end
+    if not IsValid(ply) or not boneReplacement[zone] or health < 0 then return end
 
     net.Start("EFTM_player:net:server:updateHealth")
         net.WriteUInt(totalHealth[zone].index, 3)
@@ -73,7 +73,7 @@ function updatePartHealth(ply, zone, health)
 end
 
 local function updateBleedingState(ply, zone, status)
-    if !IsValid(ply) || !boneReplacement[zone] then return end
+    if not IsValid(ply) or not boneReplacement[zone] then return end
 
     net.Start("EFTM_player:net:server:updateBleedingState")
         net.WriteUInt(totalHealth[zone].index, 3)
@@ -82,7 +82,7 @@ local function updateBleedingState(ply, zone, status)
 end
 
 local function updateBrokenState(ply, zone, status)
-    if !IsValid(ply) || !boneReplacement[zone] then return end
+    if not IsValid(ply) or not boneReplacement[zone] then return end
 
     net.Start("EFTM_player:net:server:updateBrokenState")
         net.WriteUInt(totalHealth[zone].index, 3)
@@ -91,7 +91,7 @@ local function updateBrokenState(ply, zone, status)
 end
 
 local function bleedTest(ply, zone)
-    if ply.EFTM.BODY[zone].bleeding || math.random(1, 10) > 2 then return end
+    if ply.EFTM.BODY[zone].bleeding or math.random(1, 10) > 2 then return end
 
     ply.EFTM.BLEEDING = true
     ply.EFTM.BODY[zone].bleeding = true
@@ -99,7 +99,7 @@ local function bleedTest(ply, zone)
 end
 
 local function breakTest(ply, zone)
-    if !totalHealth[zone].canBreak || ply.EFTM.BODY[zone].broken || math.random(1, 10) > 2 then return end
+    if not totalHealth[zone].canBreak or ply.EFTM.BODY[zone].broken or math.random(1, 10) > 2 then return end
 
     ply.EFTM.BODY[zone].broken = true
     ply:SetRunSpeed(ply:GetRunSpeed() - ply.EFTM.DEFAULT_RUN * .2)
@@ -113,11 +113,11 @@ local function dealDamage(ply, zone, dmg, ignoreBleeding)
     local zoneHealth = ply.EFTM.BODY[zone].life
     local lastHealth = zoneHealth - damage
 
-    if lastHealth <= 0 && totalHealth[zone].deadly then
+    if lastHealth <= 0 and totalHealth[zone].deadly then
         ply:Kill()
     elseif lastHealth > 0 then
         ply.EFTM.BODY[zone].life = lastHealth
-        if !ignoreBleeding then bleedTest(ply, zone) end
+        if not ignoreBleeding then bleedTest(ply, zone) end
         breakTest(ply, zone)
         updatePartHealth(ply, zone, lastHealth)
     elseif lastHealth <= 0 then
@@ -128,11 +128,11 @@ local function dealDamage(ply, zone, dmg, ignoreBleeding)
                 local newHealth = v.life - damage
 
                 ply.EFTM.BODY[k].life = newHealth
-                if newHealth == 0 && v.deadly then
+                if newHealth == 0 and v.deadly then
                     return ply:Kill()
                 end
                 updatePartHealth(ply, k, newHealth)
-                if !ignoreBleeding then bleedTest(ply, k) end
+                if not ignoreBleeding then bleedTest(ply, k) end
                 breakTest(ply, k)
                 break
             else
@@ -140,11 +140,11 @@ local function dealDamage(ply, zone, dmg, ignoreBleeding)
 
                 ply.EFTM.BODY[k].life = newHealth
                 damage = damage - v.life
-                if newHealth == 0 && v.deadly then
+                if newHealth == 0 and v.deadly then
                     return ply:Kill()
                 end
                 updatePartHealth(ply, k, newHealth)
-                if !ignoreBleeding then bleedTest(ply, k) end
+                if not ignoreBleeding then bleedTest(ply, k) end
                 breakTest(ply, k)
             end
         end
@@ -167,7 +167,7 @@ hook.Add("PlayerSpawn", "EFTM:hook:server:setupPlayerHealth", function(ply, _)
 end)
 
 hook.Add("EntityFireBullets", "EFTM:hook:server:manageDamageBullets", function(ent, data)
-    if !IsValid(ent) then return end
+    if not IsValid(ent) then return end
 
     if #firedBullets > 20 then
         table.remove(firedBullets, 1)
@@ -176,18 +176,18 @@ hook.Add("EntityFireBullets", "EFTM:hook:server:manageDamageBullets", function(e
 end)
 
 hook.Add("EntityTakeDamage", "EFTM:hook:server:manageDamage", function(ent, dmg)
-    if !IsValid(ent) then return end
+    if not IsValid(ent) then return end
     local dmgPos = dmg:GetDamagePosition()
     local attacker = dmg:GetAttacker()
 
-    if !IsValid(attacker) then return end
+    if not IsValid(attacker) then return end
     local len = #firedBullets
     local dir = nil
 
     for i = len, 0, -1 do
         local tab = firedBullets[i]
 
-        if !tab then continue end
+        if not tab then continue end
 
         if tab.entity == attacker then
             dir = tab.direction
@@ -195,16 +195,16 @@ hook.Add("EntityTakeDamage", "EFTM:hook:server:manageDamage", function(ent, dmg)
         end
     end
 
-    if !dir then return end
+    if not dir then return end
     local dirMul = (dir * 100)
     local hit, hitbox = getBulletDirection(dmgPos - dirMul, dmgPos + dirMul, ent)
     local hitboxbone = ent:GetHitBoxBone(hitbox, 0)
 
-    if hit and hitboxbone != nil then
+    if hit and hitboxbone ~= nil then
         local zone = ent:GetHitBoxHitGroup(hitbox, 0)
         local replacement = boneReplacement[zone]
 
-        if !replacement then replacement = "stomach" return end
+        if not replacement then replacement = "stomach" return end
         dealDamage(ent, replacement, dmg)
     end
 end)
@@ -224,9 +224,9 @@ hook.Add("Initialize", "EFTM:hook:server:manageBleeding", function()
         local players = player.GetAll()
 
         for _, ply in ipairs(players) do
-            if !IsValid(ply) || !ply.EFTM.BLEEDING then continue end
+            if not IsValid(ply) or not ply.EFTM.BLEEDING then continue end
             for k, v in pairs(ply.EFTM.BODY) do
-                if !v.bleeding then continue end
+                if not v.bleeding then continue end
                 local partHealth = v.life
 
                 if partHealth - 1 >= 0 then

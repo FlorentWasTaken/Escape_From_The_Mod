@@ -9,5 +9,17 @@
         "horizontal_size": 2,
         "vertical_size": 1,
         "type": "electronics"
+    },
+    "ai-2": {
+        "horizontal_size": 1,
+        "vertical_size": 1,
+        "type": "medkit",
+        "durability": 100
+    },
+    "cms": {
+        "horizontal_size": 2,
+        "vertical_size": 1,
+        "type": "treatment",
+        "durability": 5
     }
 }

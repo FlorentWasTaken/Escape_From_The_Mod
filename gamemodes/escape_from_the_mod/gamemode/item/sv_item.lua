@@ -1,26 +1,25 @@
+local useableType = {
+    ["drinks"] = useDrink,
+    ["medkit"] = useMedkit,
+    ["treatment"] = useTreatement
+}
+
 Item = {}
 
-local function checkNumber(nbr)
-    if !nbr || type(nbr) ~= "number" || nbr <= 0 then return false end
-    return true
-end
-
-function Item:new(name, config)
+function Item:new(name)
     local obj = {}
 
-    if (!config.type || type(config.type) ~= "string") then
-        return nil
-    elseif !checkNumber(config.horizontal_size) || !checkNumber(config.vertical_size) then
-        return nil
-    end
+    if !EFTM.CONFIG.ITEMS || !EFTM.CONFIG.ITEMS[name] then return nil end
+    local cfg = EFTM.CONFIG.ITEMS[name]
 
     setmetatable(obj, self)
     self.__index = self
-    obj.name = name
-    obj.type = config.type
-    obj.durability = config.durability || -1
-    obj.horizontal = config.horizontal_size
-    obj.vertical = config.vertical_size
+    obj.name = cfg.name
+    obj.type = cfg.type
+    obj.durability = cfg.durability && tonumber(cfg.durability) || -1
+    obj.horizontal = cfg.horizontal_size && tonumber(cfg.horizontal_size) || 1
+    obj.vertical = cfg.vertical_size && tonumber(cfg.vertical_size) || 1
+    obj.use = useableType[cfg.type] || nil
     return obj
 end
 
@@ -38,6 +37,11 @@ function Item:debug()
     print(string.format("Durabilty: %d", self.durability))
     print(string.format("Horizontal size: %d", self.horizontal))
     print(string.format("Vertical size: %d\n", self.vertical))
+end
+
+function Item:useable()
+    if !useableType[self.type] then return false end
+    return true
 end
 
 function loadItems()

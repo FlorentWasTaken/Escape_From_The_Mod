@@ -57,7 +57,7 @@ hook.Add("Initialize", "EFTM:hook:server:manageNeeds", function()
 
             if hunger == 0 then
                 ply.EFTM.STAMINA_REGEN = 0
-            else if hunger - rate >= 0 then
+            elseif hunger - rate >= 0 then
                 ply.EFTM.NEEDS.hunger = hunger - rate
             else
                 ply.EFTM.NEEDS.hunger = 0
@@ -81,7 +81,7 @@ hook.Add("Initialize", "EFTM:hook:server:manageNeeds", function()
 
             if hunger == 0 && thirst == 0 then
                 dealNeedsDamage(ply, 2)
-            else if hunger == 0 || thirst == 0 then
+            elseif hunger == 0 || thirst == 0 then
                 dealNeedsDamage(ply, 1)
             end
         end

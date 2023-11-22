@@ -16,9 +16,10 @@ function Item:new(name)
     self.__index = self
     obj.name = cfg.name
     obj.type = cfg.type
-    obj.durability = cfg.durability and tonumber(cfg.durability) or -1
-    obj.horizontal = cfg.horizontal_size and tonumber(cfg.horizontal_size) or 1
-    obj.vertical = cfg.vertical_size and tonumber(cfg.vertical_size) or 1
+    obj.durability = cfg.durability or -1
+    obj.horizontal = cfg.horizontal_size or 1
+    obj.vertical = cfg.vertical_size or 1
+    obj.useTime = cfg.use_time or nil
     obj.use = useableType[cfg.type] or nil
     return obj
 end

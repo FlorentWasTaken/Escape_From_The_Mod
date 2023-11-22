@@ -156,13 +156,13 @@ hook.Add("PlayerSpawn", "EFTM:hook:server:setupPlayerHealth", function(ply, _)
     ply:SetHealth(440)
     ply.EFTM.BLEEDING = false
     ply.EFTM.BODY = {
-        ["head"] = {life = totalHealth["head"].total, bleeding = false},
-        ["thorax"] = {life = totalHealth["thorax"].total, bleeding = false},
-        ["stomach"] = {life = totalHealth["stomach"].total, bleeding = false},
-        ["right-arm"] = {life = totalHealth["right-arm"].total, bleeding = false, broken = false},
-        ["left-arm"] = {life = totalHealth["left-arm"].total, bleeding = false, broken = false},
-        ["right-leg"] = {life = totalHealth["right-leg"].total, bleeding = false, broken = false},
-        ["left-leg"] = {life = totalHealth["left-leg"].total, bleeding = false, broken = false},
+        ["head"] = {life = totalHealth["head"].total, maxLife = totalHealth["head"].total, bleeding = false},
+        ["thorax"] = {life = totalHealth["thorax"].total, maxLife = totalHealth["thorax"].total, bleeding = false},
+        ["stomach"] = {life = totalHealth["stomach"].total, maxLife = totalHealth["stomach"].total, bleeding = false},
+        ["right-arm"] = {life = totalHealth["right-arm"].total, maxLife = totalHealth["right-arm"].total, bleeding = false, broken = false},
+        ["left-arm"] = {life = totalHealth["left-arm"].total, maxLife = totalHealth["left-arm"].total, bleeding = false, broken = false},
+        ["right-leg"] = {life = totalHealth["right-leg"].total, maxLife = totalHealth["right-leg"].total, bleeding = false, broken = false},
+        ["left-leg"] = {life = totalHealth["left-leg"].total, maxLife = totalHealth["left-leg"].total, bleeding = false, broken = false},
     }
 end)
 

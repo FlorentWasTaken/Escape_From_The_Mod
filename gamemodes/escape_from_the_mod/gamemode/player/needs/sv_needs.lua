@@ -9,14 +9,15 @@ local function updateNeeds(ply)
     net.Send(ply)
 end
 
-
 function _player:hunger(amount)
+    if not self:Alive() then return 0 end
     if amount == nil then return self.EFTM.NEEDS.hunger end
     self.EFTM.NEEDS.hunger = math.Clamp(amount, 0, 100)
     updateNeeds(self)
 end
 
 function _player:thirst(amount)
+    if not self:Alive() then return 0 end
     if amount == nil then return self.EFTM.NEEDS.thirst end
     self.EFTM.NEEDS.thirst = math.Clamp(amount, 0, 100)
     updateNeeds(self)

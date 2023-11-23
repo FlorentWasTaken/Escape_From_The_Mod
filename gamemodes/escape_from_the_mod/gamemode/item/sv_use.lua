@@ -13,12 +13,12 @@ function useMedkit(self, owner, part)
 
     timer.Simple(self.useTime or 5, function()
         if owner.EFTM.BODY[part].life == 0 then return end
-
         local add = math.min(max - life, durability)
 
         owner.EFTM.BODY[part].life = add
         owner.EFTM.usingItem = false
 
+        owner:bodyPartHealth(part, add)
         if durability - add <= 0 then
             owner:removeItem(self)
         else
@@ -39,6 +39,8 @@ function useTreatement(self, owner, part)
         owner.EFTM.BODY[part].maxLife = math.floor(owner.EFTM.BODY[part].maxLife * .5)
         owner.EFTM.usingItem = false
 
+        owner:bodyPartHealth(part, 1)
+        owner:brokenPart(part, false)
         if durability - 1 == 0 then
             owner:removeItem(self)
         else
@@ -90,7 +92,7 @@ net.Receive("EFTM_item:net:server:useItem", function(len, ply)
     local param = net.ReadUInt(4)
     local item = ply:getItemByPos(itemPos)
 
-    if not item or not item:useable() then return end
+    if not item or not item:useable() or not ply:Alive() then return end
     if ply.EFTM.usingItem then return end
 
     ply.EFTM.usingItem = true

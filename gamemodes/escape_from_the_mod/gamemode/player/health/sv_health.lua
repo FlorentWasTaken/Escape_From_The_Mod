@@ -2,6 +2,8 @@ util.AddNetworkString("EFTM_player:net:server:updateHealth")
 util.AddNetworkString("EFTM_player:net:server:updateBleedingState")
 util.AddNetworkString("EFTM_player:net:server:updateBrokenState")
 
+local _player = FindMetaTable("Player")
+
 local boneReplacement = {
     [1] = "head",
     [2] = "thorax",
@@ -51,6 +53,53 @@ local totalHealth = {
 
 local firedBullets = {}
 
+local function updateBleedingState(ply, zone, status)
+    if not IsValid(ply) or not boneReplacement[zone] then return end
+
+    net.Start("EFTM_player:net:server:updateBleedingState")
+        net.WriteUInt(totalHealth[zone].index, 3)
+        net.WriteBool(status)
+    net.Send(ply)
+end
+
+local function updateBrokenState(ply, zone, status)
+    if not IsValid(ply) or not boneReplacement[zone] then return end
+
+    net.Start("EFTM_player:net:server:updateBrokenState")
+        net.WriteUInt(totalHealth[zone].index, 3)
+        net.WriteBool(status)
+    net.Send(ply)
+end
+
+function _player:bodyPartHealth(part, health)
+    if not part or not self:Alive() then return 0 end
+    if not totalHealth[part] or type(health) ~= "number" then return 0 end
+    if health == nil then return self.EFTM.BODY[part].life end
+    local checked = math.Clamp(health, 0, self.EFTM.BODY[part].maxLife)
+
+    self.EFTM.BODY[part].life = checked
+    self:SetHealth(self:Health() + checked)
+    updatePartHealth(self, part, checked)
+end
+
+function _player:brokenPart(part, broken)
+    if not part or not self:Alive() then return 0 end
+    if not totalHealth[part] or type(broken) ~= "boolean" then return 0 end
+    if broken == nil then return self.EFTM.BODY[part].broken end
+
+    self.EFTM.BODY[part].broken = broken
+    updateBrokenState(self, part, broken)
+end
+
+function _player:bleedingPart(part, bleeding)
+    if not part or not self:Alive() then return 0 end
+    if not totalHealth[part] or type(broken) ~= "boolean" then return 0 end
+    if bleeding == nil then return self.EFTM.BODY[part].bleeding end
+
+    self.EFTM.BODY[part].bleeding = bleeding
+    updateBleedingState(self, part, bleeding)
+end
+
 local function getBulletDirection(pos1, pos2, ply)
 	local trace = {
 		start = pos1,
@@ -69,24 +118,6 @@ function updatePartHealth(ply, zone, health)
     net.Start("EFTM_player:net:server:updateHealth")
         net.WriteUInt(totalHealth[zone].index, 3)
         net.WriteUInt(health, 7)
-    net.Send(ply)
-end
-
-local function updateBleedingState(ply, zone, status)
-    if not IsValid(ply) or not boneReplacement[zone] then return end
-
-    net.Start("EFTM_player:net:server:updateBleedingState")
-        net.WriteUInt(totalHealth[zone].index, 3)
-        net.WriteBool(status)
-    net.Send(ply)
-end
-
-local function updateBrokenState(ply, zone, status)
-    if not IsValid(ply) or not boneReplacement[zone] then return end
-
-    net.Start("EFTM_player:net:server:updateBrokenState")
-        net.WriteUInt(totalHealth[zone].index, 3)
-        net.WriteBool(status)
     net.Send(ply)
 end
 

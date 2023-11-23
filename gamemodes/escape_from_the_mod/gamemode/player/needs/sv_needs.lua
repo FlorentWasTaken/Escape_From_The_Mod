@@ -54,7 +54,8 @@ local function dealNeedsDamage(ply, dmg)
     end
 end
 
-hook.Add("PlayerSpawn", "EFTM:hook:server:setupPlayerNeeds", function(ply, _)
+hook.Add("PlayerInitialSpawn", "EFTM:hook:server:setupPlayerNeeds", function(ply, _)
+    ply.EFTM = ply.EFTM or {}
     ply.EFTM.NEEDS = {
         ["hunger"] = 100,
         ["thirst"] = 100

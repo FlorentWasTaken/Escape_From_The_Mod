@@ -182,7 +182,8 @@ local function dealDamage(ply, zone, dmg, ignoreBleeding)
     end
 end
 
-hook.Add("PlayerSpawn", "EFTM:hook:server:setupPlayerHealth", function(ply, _)
+hook.Add("PlayerInitialSpawn", "EFTM:hook:server:setupPlayerHealth", function(ply, _)
+    ply.EFTM = ply.EFTM or {}
     ply:SetMaxHealth(440)
     ply:SetHealth(440)
     ply.EFTM.BLEEDING = false

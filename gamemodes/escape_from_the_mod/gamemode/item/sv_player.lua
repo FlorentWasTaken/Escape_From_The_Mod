@@ -8,7 +8,7 @@ function ply:removeItem(item)
     table.RemoveByValue(ply.EFTM.INVENTORY, item)
 end
 
-hook.Add("PlayerSpawn", "EFTM:hook:server:loadPlayerItems", function(ply, _)
+hook.Add("PlayerInitialSpawn", "EFTM:hook:server:loadPlayerItems", function(ply, _)
     ply.EFTM = ply.EFTM or {}
     ply.EFTM.INVENTORY = {}
 end)

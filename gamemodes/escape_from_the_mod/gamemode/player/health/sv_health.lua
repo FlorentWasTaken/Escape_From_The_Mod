@@ -140,7 +140,7 @@ end
 
 local function dealDamage(ply, zone, dmg, ignoreBleeding)
     local health = ply:Health()
-    local damage = dmg:GetDamage()
+    local damage = type(dmg) == "number" and dmg or dmg:GetDamage()
     local zoneHealth = ply.EFTM.BODY[zone].life
     local lastHealth = zoneHealth - damage
 

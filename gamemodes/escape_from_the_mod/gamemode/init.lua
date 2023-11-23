@@ -16,6 +16,7 @@ include("item/sv_item.lua")
 include("item/sv_player.lua")
 include("player/health/sv_health.lua")
 include("player/needs/sv_needs.lua")
+include("raid/sv_start.lua")
 
 local function loadSettings()
 	local map = game.GetMap()

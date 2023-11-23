@@ -1,10 +1,25 @@
 util.AddNetworkString("EFTM_player:net:server:updateNeeds")
 
+local _player = FindMetaTable("Player")
+
 local function updateNeeds(ply)
     net.Start("EFTM_player:net:server:updateNeeds")
         net.WriteUInt(ply.EFTM.NEEDS.hunger, 7)
         net.WriteUInt(ply.EFTM.NEEDS.thirst, 7)
     net.Send(ply)
+end
+
+
+function _player:hunger(amount)
+    if amount == nil then return self.EFTM.NEEDS.hunger end
+    self.EFTM.NEEDS.hunger = math.Clamp(amount, 0, 100)
+    updateNeeds(self)
+end
+
+function _player:thirst(amount)
+    if amount == nil then return self.EFTM.NEEDS.thirst end
+    self.EFTM.NEEDS.thirst = math.Clamp(amount, 0, 100)
+    updateNeeds(self)
 end
 
 local function dealNeedsDamage(ply, dmg)

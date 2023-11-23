@@ -48,11 +48,41 @@ function useTreatement(self, owner, part)
 end
 
 function useDrink(self, owner, amount)
+    if not self or not owner or not part then return end
+    local durability = self:durability()
 
+    if amount <= 0 then return end
+    if durability <= 0 then owner:removeItem(self) return end
+    if durability < amount then amount = durability end
+
+    timer.Simple(self.useTime or 10, function()
+        owner.EFTM.usingItem = false
+
+        self:durability(durability - amount)
+        owner:hunger(owner:hunger() + amount)
+        if durability == 0 then
+            owner:removeItem(self)
+        end
+    end)
 end
 
 function useFood(self, owner, amount)
+    if not self or not owner or not part then return end
+    local durability = self:durability()
 
+    if amount <= 0 then return end
+    if durability <= 0 then owner:removeItem(self) return end
+    if durability < amount then amount = durability end
+
+    timer.Simple(self.useTime or 10, function()
+        owner.EFTM.usingItem = false
+
+        self:durability(durability - amount)
+        owner:thirst(owner:thirst() + amount)
+        if durability == 0 then
+            owner:removeItem(self)
+        end
+    end)
 end
 
 net.Receive("EFTM_item:net:server:useItem", function(len, ply)

@@ -1,6 +1,10 @@
 local notifications = {}
 local notHidden = {
-    ["CHudGMod"] = true, // correspond to HUDPaint hook
+    ["CHudGMod"] = true, -- correspond to HUDPaint hook
+}
+local materials = {
+    Material("eftm/icons/notification_icon_alert.png"), -- green alert
+    Material("eftm/icons/notification_icon_alert_red"), -- red alert
 }
 
 hook.Add("HUDShouldDraw", "EFTM_gui:hook:client:hideHUD", function(name)
@@ -31,18 +35,22 @@ hook.Add("HUDPaint", "EFTM_gui:client:paintHUD", function()
         x = scrw - width - scrw * .05
         y = scrh - height - k * scrh * .025
         surface.SetTextColor(255, 255, 255)
-        surface.SetTextPos(x, y)
+        surface.SetTextPos(x + height * 1.1, y)
 
         surface.SetDrawColor(0, 0, 0, 255)
         surface.DrawRect(x, y, scrw - x, height)
         surface.DrawText(v.message)
+        surface.SetDrawColor(255, 255, 255, 255)
+        surface.SetMaterial(materials[v.type])
+        surface.DrawTexturedRect(x, y, height, height)
     end
 end)
 
 net.Receive("EFTM_gui:net:server:notify", function(len)
     local message = net.ReadString()
+    local messageType = net.ReadUInt(2)
 
     if not message then return end
 
-    table.insert(notifications, {message = message, size = string.len(message), startTime = os.time()})
+    table.insert(notifications, {message = message, type = messageType, size = string.len(message), startTime = os.time()})
 end)

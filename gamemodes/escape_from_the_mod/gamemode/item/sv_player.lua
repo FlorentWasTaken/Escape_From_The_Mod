@@ -12,3 +12,7 @@ hook.Add("PlayerInitialSpawn", "EFTM:hook:server:loadPlayerItems", function(ply,
     ply.EFTM = ply.EFTM or {}
     ply.EFTM.INVENTORY = {}
 end)
+
+hook.Add("PlayerSwitchFlashlight", "EFTM:hook:server:disableFlashlight", function(ply, _)
+    return false
+end)

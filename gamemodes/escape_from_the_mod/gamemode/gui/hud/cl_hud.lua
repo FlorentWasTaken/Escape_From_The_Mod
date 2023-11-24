@@ -7,6 +7,16 @@ local materials = {
     Material("eftm/icons/notification_icon_alert_red"), -- red alert
 }
 
+local SetDrawColor = surface.SetDrawColor
+local DrawRect = surface.DrawRect
+local DrawText = surface.DrawText
+local SetMaterial = surface.SetMaterial
+local DrawTexturedRect = surface.DrawTexturedRect
+local SetFont = surface.SetFont
+local GetTextSize = surface.GetTextSize
+local SetTextColor = surface.SetTextColor
+local SetTextPos = surface.SetTextPos
+
 hook.Add("HUDShouldDraw", "EFTM_gui:hook:client:hideHUD", function(name)
 	return notHidden[name] ~= nil
 end)
@@ -30,19 +40,19 @@ hook.Add("HUDPaint", "EFTM_gui:client:paintHUD", function()
             table.remove(notifications, k)
             continue
         end
-        surface.SetFont("GModNotify")
-        width, height = surface.GetTextSize(v.message)
+        SetFont("GModNotify")
+        width, height = GetTextSize(v.message)
         x = scrw - width - scrw * .05
         y = scrh - height - k * scrh * .025
-        surface.SetTextColor(255, 255, 255)
-        surface.SetTextPos(x + height * 1.1, y)
+        SetTextColor(255, 255, 255)
+        SetTextPos(x + height * 1.1, y)
 
-        surface.SetDrawColor(0, 0, 0, 255)
-        surface.DrawRect(x, y, scrw - x, height)
-        surface.DrawText(v.message)
-        surface.SetDrawColor(255, 255, 255, 255)
-        surface.SetMaterial(materials[v.type])
-        surface.DrawTexturedRect(x, y, height, height)
+        SetDrawColor(0, 0, 0, 255)
+        DrawRect(x, y, scrw - x, height)
+        DrawText(v.message)
+        SetDrawColor(255, 255, 255, 255)
+        SetMaterial(materials[v.type])
+        DrawTexturedRect(x, y, height, height)
     end
 end)
 

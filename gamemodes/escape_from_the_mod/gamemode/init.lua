@@ -9,6 +9,7 @@ AddCSLuaFile("player/needs/cl_needs.lua")
 AddCSLuaFile("item/cl_item.lua")
 
 include("shared.lua")
+include("gui/hud/sv_hud.lua")
 include("player/stamina/sv_stamina.lua")
 include("player/spawn/sv_spawn.lua")
 include("item/sv_use.lua")

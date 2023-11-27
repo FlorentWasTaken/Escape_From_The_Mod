@@ -45,6 +45,10 @@ hook.Add("PlayerDeathSound", "EFTM:hook:server:muteDeathSound", function(ply)
     return true
 end)
 
+hook.Add("PlayerSwitchFlashlight", "EFTM:hook:server:disableFlashlight", function(ply, _)
+    return false
+end)
+
 hook.Add("PlayerDeath", "EFTM_player:hook:server:manageDeathSpawn", function(ply)
     ply.EFTM.IN_HIDEOUT = true
 end)

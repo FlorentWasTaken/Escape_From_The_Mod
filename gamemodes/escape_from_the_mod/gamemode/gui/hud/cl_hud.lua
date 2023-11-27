@@ -1,4 +1,5 @@
 local notifications = {}
+local showWeaponSelector = 0
 local notHidden = {
     ["CHudGMod"] = true, -- correspond to HUDPaint hook
 }
@@ -17,21 +18,9 @@ local GetTextSize = surface.GetTextSize
 local SetTextColor = surface.SetTextColor
 local SetTextPos = surface.SetTextPos
 
-hook.Add("HUDShouldDraw", "EFTM_gui:hook:client:hideHUD", function(name)
-	return notHidden[name] ~= nil
-end)
-
-hook.Add("ScoreboardShow", "EFTM_gui:hook:client:hideScoreboard", function()
-    return true
-end)
-
-hook.Add("ContextMenuOpen", "EFTM_gui:hook:client:hideContextMenu", function()
-    return false
-end)
-
-hook.Add("HUDPaint", "EFTM_gui:client:paintHUD", function()
+local function displayNotification()
     local scrw, scrh = ScrW(), ScrH()
-    local time = os.time()
+    local time = RealTime()
     local width, height = 0, 0
     local x, y = 0, 0
 
@@ -54,6 +43,34 @@ hook.Add("HUDPaint", "EFTM_gui:client:paintHUD", function()
         SetMaterial(materials[v.type])
         DrawTexturedRect(x, y, height, height)
     end
+end
+
+local function displayWeaponSelector()
+    if showWeaponSelector < RealTime() - 5 then return end
+
+end
+
+hook.Add("HUDShouldDraw", "EFTM_gui:hook:client:hideHUD", function(name)
+	return notHidden[name] ~= nil
+end)
+
+hook.Add("ScoreboardShow", "EFTM_gui:hook:client:hideScoreboard", function()
+    return true
+end)
+
+hook.Add("ContextMenuOpen", "EFTM_gui:hook:client:hideContextMenu", function()
+    return false
+end)
+
+hook.Add("HUDPaint", "EFTM_gui:client:paintHUD", function()
+    displayNotification()
+    displayWeaponSelector()
+end)
+
+hook.Add("PlayerBindPress", "EFTM_gui:client:checkPressedBind", function(ply, bind, pressed, code)
+    if not pressed or (code ~= 112 and code ~= 113) then return end
+
+    showWeaponSelector = RealTime()
 end)
 
 net.Receive("EFTM_gui:net:server:notify", function(len)
@@ -62,5 +79,5 @@ net.Receive("EFTM_gui:net:server:notify", function(len)
 
     if not message then return end
 
-    table.insert(notifications, {message = message, type = messageType, size = string.len(message), startTime = os.time()})
+    table.insert(notifications, {message = message, type = messageType, size = string.len(message), startTime = RealTime()})
 end)

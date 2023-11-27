@@ -87,6 +87,25 @@ function useFood(self, owner, amount)
     end)
 end
 
+function useBleeding(self, owner, part)
+    if not self or not owner or not part then return end
+    local durability = self:durability()
+
+    if durability <= 0 then owner:removeItem(self) return end
+    if not owner.EFTM.BODY[part] or not owner.EFTM.BODY[part].bleeding then return end
+
+    timer.Simple(self.useTime or 10, function()
+        owner.EFTM.usingItem = false
+
+        owner:bleedingPart(part, false)
+        if durability - 1 == 0 then
+            owner:removeItem(self)
+        else
+            self:durability(durability - 1)
+        end
+    end)
+end
+
 net.Receive("EFTM_item:net:server:useItem", function(len, ply)
     local itemPos = net.ReadUInt(8)
     local param = net.ReadUInt(4)

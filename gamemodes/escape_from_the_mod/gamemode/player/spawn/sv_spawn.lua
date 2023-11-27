@@ -61,7 +61,7 @@ end)
 
 net.Receive("EFTM_player:net:server:initFirstSpawn", function(len, ply)
     ply.EFTM = ply.EFTM or {}
-    if ply.EFTM.HAS_BEEN_INIT then return end
+    if ply.EFTM.HAS_BEEN_INIT or not EFTM.CONFIG.MAP then return end
 
     bringPlayerToHideout(ply)
     ply.EFTM.IN_HIDEOUT = true

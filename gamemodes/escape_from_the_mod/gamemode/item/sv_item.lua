@@ -18,6 +18,7 @@ function Item:new(name)
     obj.name = cfg.name
     obj.type = cfg.type
     obj.durability = cfg.durability or -1
+    obj.single_use = cfg.single_use or false
     obj.horizontal = cfg.horizontal_size or 1
     obj.vertical = cfg.vertical_size or 1
     obj.useTime = cfg.use_time or nil

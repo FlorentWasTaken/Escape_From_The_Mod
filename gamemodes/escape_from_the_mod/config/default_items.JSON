@@ -4,15 +4,15 @@
         "vertical_size": 2,
         "type": "drinks",
         "durability": 60,
-        "effect": 1,
+        "single_use": false,
         "use_time": 3
     },
     "mre": {
         "horizontal_size": 1,
         "vertical_size": 2,
         "type": "foods",
-        "durability": 1,
-        "effect": 70,
+        "durability": 70,
+        "single_use": true,
         "use_time": 5
     },
     "gpu": {

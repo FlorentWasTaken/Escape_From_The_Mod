@@ -55,7 +55,7 @@ function useDrink(self, owner, amount)
 
     if amount <= 0 then return end
     if durability <= 0 then owner:removeItem(self) return end
-    if durability < amount then amount = durability end
+    if self.single_use or durability < amount then amount = durability end
 
     timer.Simple(self.useTime or 10, function()
         owner.EFTM.usingItem = false
@@ -74,7 +74,7 @@ function useFood(self, owner, amount)
 
     if amount <= 0 then return end
     if durability <= 0 then owner:removeItem(self) return end
-    if durability < amount then amount = durability end
+    if self.single_use or durability < amount then amount = durability end
 
     timer.Simple(self.useTime or 10, function()
         owner.EFTM.usingItem = false

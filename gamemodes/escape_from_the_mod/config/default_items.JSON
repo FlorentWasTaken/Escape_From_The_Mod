@@ -3,7 +3,17 @@
         "horizontal_size": 1,
         "vertical_size": 2,
         "type": "drinks",
-        "durability": 60
+        "durability": 60,
+        "effect": 1,
+        "use_time": 3
+    },
+    "mre": {
+        "horizontal_size": 1,
+        "vertical_size": 2,
+        "type": "foods",
+        "durability": 1,
+        "effect": 70,
+        "use_time": 5
     },
     "gpu": {
         "horizontal_size": 2,
@@ -23,5 +33,12 @@
         "type": "treatment",
         "durability": 5,
         "use_time": 16
+    },
+    "bandage": {
+        "vertical_size": 1,
+        "horizontal_size": 1,
+        "type": "bleeding",
+        "durability": 1,
+        "use_time": 2
     }
 }

@@ -1,7 +1,8 @@
 local useableType = {
     ["drinks"] = useDrink,
+    ["foods"] = useFood,
     ["medkit"] = useMedkit,
-    ["treatment"] = useTreatement
+    ["treatment"] = useTreatement,
 }
 
 Item = {}

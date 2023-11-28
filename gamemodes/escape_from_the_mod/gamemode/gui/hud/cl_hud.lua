@@ -17,6 +17,7 @@ local SetFont = surface.SetFont
 local GetTextSize = surface.GetTextSize
 local SetTextColor = surface.SetTextColor
 local SetTextPos = surface.SetTextPos
+local floor = math.floor
 
 local function displayNotification()
     local scrw, scrh = ScrW(), ScrH()
@@ -47,7 +48,18 @@ end
 
 local function displayWeaponSelector()
     if showWeaponSelector < RealTime() - 5 then return end
+    local scrw, scrh = ScrW(), ScrH()
+    local width, height = floor(scrw * .04), scrw * .04
+    local boxCount = 11
+    local leftPos = 0
 
+    SetDrawColor(0, 0, 0, 200)
+    for i = 0, boxCount, 1 do
+        local space = floor((i + 1) * scrw * .001) - 1
+        local x, y = leftPos + width * i + space, scrh - height * 1.2
+
+        DrawRect(floor(x), y, width, height)
+    end
 end
 
 hook.Add("HUDShouldDraw", "EFTM_gui:hook:client:hideHUD", function(name)

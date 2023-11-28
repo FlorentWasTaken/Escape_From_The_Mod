@@ -6,6 +6,8 @@ local notHidden = {
 local materials = {
     Material("eftm/icons/notification_icon_alert.png"), -- green alert
     Material("eftm/icons/notification_icon_alert_red"), -- red alert
+    Material("eftm/inventory/inventory_weapon_box.png"), -- hot bar box
+    Material("eftm/inventory/inventory_box.png") -- normal inventory box
 }
 
 local SetDrawColor = surface.SetDrawColor

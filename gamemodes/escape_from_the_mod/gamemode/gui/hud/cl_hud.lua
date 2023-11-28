@@ -17,6 +17,7 @@ local SetFont = surface.SetFont
 local GetTextSize = surface.GetTextSize
 local SetTextColor = surface.SetTextColor
 local SetTextPos = surface.SetTextPos
+local DrawOutlinedRect = surface.DrawOutlinedRect
 local floor = math.floor
 
 local function displayNotification()
@@ -51,14 +52,22 @@ local function displayWeaponSelector()
     local scrw, scrh = ScrW(), ScrH()
     local width, height = floor(scrw * .04), scrw * .04
     local boxCount = 11
+    local weaponCount = 4
+    local spaceSize = scrw * .001
     local leftPos = 0
 
-    SetDrawColor(0, 0, 0, 200)
-    for i = 0, boxCount, 1 do
-        local space = floor((i + 1) * scrw * .001) - 1
-        local x, y = leftPos + width * i + space, scrh - height * 1.2
+    SetDrawColor(34, 34, 34, 150)
+    DrawRect(leftPos, scrh - height * .2, weaponCount * width + (weaponCount - 1) * spaceSize, height * .2)
+    for i = 0, weaponCount - 1, 1 do
+        local space = floor(i * spaceSize)
+        local x, y = floor(leftPos + width * i + space), scrh - height * 1.2
 
-        DrawRect(floor(x), y, width, height)
+        SetDrawColor(0, 0, 0, 200)
+        DrawRect(x, y, width, height)
+        SetDrawColor(88, 93, 96, 255)
+        DrawOutlinedRect(x, y, width, height, 1)
+        SetDrawColor(43, 43, 43, 255)
+        DrawOutlinedRect(x + 1, y + 1, width - 2, height - 2, 1)
     end
 end
 

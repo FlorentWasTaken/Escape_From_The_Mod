@@ -52,17 +52,19 @@ end
 local function displayWeaponSelector()
     if showWeaponSelector < RealTime() - 5 then return end
     local scrw, scrh = ScrW(), ScrH()
-    local width, height = floor(scrw * .04), scrw * .04
+    local width, height = floor(scrw * .035), scrw * .035
     local boxCount = 11
     local weaponCount = 4
     local spaceSize = scrw * .001
+    local jumpSize = spaceSize * 10
     local leftPos = 0
 
     SetDrawColor(34, 34, 34, 150)
     DrawRect(leftPos, scrh - height * .2, weaponCount * width + (weaponCount - 1) * spaceSize, height * .2)
-    for i = 0, weaponCount - 1, 1 do
+    DrawRect(floor(leftPos + width * weaponCount + weaponCount * spaceSize + jumpSize), scrh - height * .2, (boxCount - weaponCount) * width + ((boxCount - weaponCount) - 1) * spaceSize + 1, height * .2)
+    for i = 0, boxCount - 1, 1 do
         local space = floor(i * spaceSize)
-        local x, y = floor(leftPos + width * i + space), scrh - height * 1.2
+        local x, y = i > 3 and floor(leftPos + width * i + space + jumpSize) or floor(leftPos + width * i + space), scrh - height * 1.2
 
         SetDrawColor(0, 0, 0, 200)
         DrawRect(x, y, width, height)

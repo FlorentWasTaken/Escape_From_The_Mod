@@ -55,13 +55,15 @@ local function displayWeaponSelector()
     local width, height = floor(scrw * .035), scrw * .035
     local boxCount = 11
     local weaponCount = 4
-    local spaceSize = scrw * .001
-    local jumpSize = spaceSize * 10
-    local leftPos = 0
+    local shortcutCount = boxCount - weaponCount
+    local spaceSize = floor(scrw * .001)
+    local jumpSize = spaceSize * 15
+    local totalSize = floor(boxCount * width + jumpSize + spaceSize * (boxCount - 1))
+    local leftPos = scrw * .5 - totalSize * .5
 
     SetDrawColor(34, 34, 34, 150)
     DrawRect(leftPos, scrh - height * .2, weaponCount * width + (weaponCount - 1) * spaceSize, height * .2)
-    DrawRect(floor(leftPos + width * weaponCount + weaponCount * spaceSize + jumpSize), scrh - height * .2, (boxCount - weaponCount) * width + ((boxCount - weaponCount) - 1) * spaceSize + 1, height * .2)
+    DrawRect(floor(leftPos + width * weaponCount + weaponCount * spaceSize + jumpSize), scrh - height * .2, shortcutCount * width + (shortcutCount - 1) * spaceSize + 1, height * .2)
     for i = 0, boxCount - 1, 1 do
         local space = floor(i * spaceSize)
         local x, y = i > 3 and floor(leftPos + width * i + space + jumpSize) or floor(leftPos + width * i + space), scrh - height * 1.2

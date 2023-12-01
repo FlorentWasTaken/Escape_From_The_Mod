@@ -1,6 +1,9 @@
 local notifications = {}
 local shortcutPoly = {}
 local showWeaponSelector = 0
+local showTimeLeft = 0
+local showTimeLeftAdvanced = 0
+local extractCount = 5
 local notHidden = {
     ["CHudGMod"] = true, -- correspond to HUDPaint hook
 }
@@ -77,6 +80,7 @@ end
 
 local function displayWeaponSelector()
     if showWeaponSelector < RealTime() - 5 then return end
+
     local scrw, scrh = ScrW(), ScrH()
     local width, height = floor(scrw * .035), scrw * .035
     local boxCount = 11
@@ -104,6 +108,27 @@ local function displayWeaponSelector()
     end
 end
 
+local function displayTimeLeft()
+    if showTimeLeft < RealTime() - 5 then showTimeLeftAdvanced = 0 return end
+
+    local scrw, scrh = ScrW(), ScrH()
+    local widthInfo, widthTimer, height = floor(scrw * .12), floor(scrw * .05), scrh * .05
+    local space = scrw * .002
+    local leftPos = scrw - widthInfo - widthTimer - space * 2
+
+    SetDrawColor(109, 160, 5, 255)
+    DrawRect(leftPos, space, widthInfo, height)
+    SetDrawColor(0, 0, 0, 180)
+    DrawRect(leftPos + space + widthInfo, space, widthTimer, height)
+
+    if showTimeLeftAdvanced < 2 then return end
+
+    for i = 1, extractCount, 1 do
+        DrawRect(leftPos, space * (i + 1) + height * i, widthInfo, height)
+        DrawRect(leftPos + space + widthInfo, space * (i + 1) + height * i, widthTimer, height)
+    end
+end
+
 hook.Add("HUDShouldDraw", "EFTM_gui:hook:client:hideHUD", function(name)
 	return notHidden[name] ~= nil
 end)
@@ -119,12 +144,20 @@ end)
 hook.Add("HUDPaint", "EFTM_gui:client:paintHUD", function()
     displayNotification()
     displayWeaponSelector()
+    displayTimeLeft()
 end)
 
 hook.Add("PlayerBindPress", "EFTM_gui:client:checkPressedBind", function(ply, bind, pressed, code)
     if not pressed or (code ~= 112 and code ~= 113) then return end
 
     showWeaponSelector = RealTime()
+end)
+
+hook.Add("PlayerButtonDown", "EFTM_gui:client:checkPressedKey", function(ply, key)
+    if not IsFirstTimePredicted() or key ~= KEY_O then return end
+
+    showTimeLeft = RealTime()
+    showTimeLeftAdvanced = showTimeLeftAdvanced + 1
 end)
 
 hook.Add("OnScreenSizeChanged", "EFTM_gui:client:screenSizeChange", function(_, _, _, _)

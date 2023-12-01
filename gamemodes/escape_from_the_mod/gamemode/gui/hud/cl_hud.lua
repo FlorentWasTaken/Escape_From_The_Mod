@@ -1,4 +1,5 @@
 local notifications = {}
+local shortcutPoly = {}
 local showWeaponSelector = 0
 local notHidden = {
     ["CHudGMod"] = true, -- correspond to HUDPaint hook
@@ -20,6 +21,8 @@ local GetTextSize = surface.GetTextSize
 local SetTextColor = surface.SetTextColor
 local SetTextPos = surface.SetTextPos
 local DrawOutlinedRect = surface.DrawOutlinedRect
+local NoTexture = draw.NoTexture
+local DrawPoly = surface.DrawPoly
 local floor = math.floor
 
 local function displayNotification()
@@ -49,6 +52,29 @@ local function displayNotification()
     end
 end
 
+local function drawShortcut(_x, _y, size, i)
+    local poly = nil
+
+    if not shortcutPoly[i] then
+        local offsetX, offsetY = _x + size * .05, _y + size * .05
+
+        poly = {
+            {x = offsetX, y = offsetY},
+            {x = offsetX + size * .3, y = offsetY},
+            {x = offsetX + size * .3, y = offsetY + size * .2},
+            {x = offsetX + size * .2, y = offsetY + size * .3},
+            {x = offsetX, y = offsetY + size * .3},
+        }
+        shortcutPoly[i] = poly
+    else
+        poly = shortcutPoly[i]
+    end
+
+    SetDrawColor(255, 255, 255, 255)
+    NoTexture()
+    DrawPoly(poly)
+end
+
 local function displayWeaponSelector()
     if showWeaponSelector < RealTime() - 5 then return end
     local scrw, scrh = ScrW(), ScrH()
@@ -74,6 +100,7 @@ local function displayWeaponSelector()
         DrawOutlinedRect(x, y, width, height, 1)
         SetDrawColor(43, 43, 43, 255)
         DrawOutlinedRect(x + 1, y + 1, width - 2, height - 2, 1)
+        drawShortcut(x, y, width, i + 1)
     end
 end
 
@@ -98,6 +125,10 @@ hook.Add("PlayerBindPress", "EFTM_gui:client:checkPressedBind", function(ply, bi
     if not pressed or (code ~= 112 and code ~= 113) then return end
 
     showWeaponSelector = RealTime()
+end)
+
+hook.Add("OnScreenSizeChanged", "EFTM_gui:client:screenSizeChange", function(_, _, _, _)
+    shortcutPoly = {}
 end)
 
 net.Receive("EFTM_gui:net:server:notify", function(len)

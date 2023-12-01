@@ -79,7 +79,7 @@ local function drawShortcut(_x, _y, size, i)
 end
 
 local function displayWeaponSelector()
-    if showWeaponSelector < RealTime() - 5 then return end
+    if showWeaponSelector < RealTime() - 8 then return end
 
     local scrw, scrh = ScrW(), ScrH()
     local width, height = floor(scrw * .035), scrw * .035
@@ -109,7 +109,7 @@ local function displayWeaponSelector()
 end
 
 local function displayTimeLeft()
-    if showTimeLeft < RealTime() - 5 then showTimeLeftAdvanced = 0 return end
+    if showTimeLeft < RealTime() - 8 then showTimeLeftAdvanced = 0 return end
 
     local scrw, scrh = ScrW(), ScrH()
     local widthInfo, widthTimer, height = floor(scrw * .12), floor(scrw * .05), scrh * .05

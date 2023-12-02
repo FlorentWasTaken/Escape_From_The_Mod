@@ -1,3 +1,6 @@
 {
-    "hideout_location": {"x": -865, "y": -3, "z": -12767, "w": 180}
+    "hideout_location": {"x": -865, "y": -3, "z": -12767, "w": 180},
+    "extracts": [
+        {"name": "roadblock", "x": 359, "y": 46, "z": -12799}
+    ]
 }

@@ -116,12 +116,14 @@ local function displayTimeLeft()
     local space = scrw * .002
     local leftPos = scrw - widthInfo - widthTimer - space * 2
 
-    SetDrawColor(109, 160, 5, 255)
-    DrawRect(leftPos, space, widthInfo, height)
     SetDrawColor(0, 0, 0, 180)
     DrawRect(leftPos + space + widthInfo, space, widthTimer, height)
 
     if showTimeLeftAdvanced < 2 then return end
+
+    SetDrawColor(109, 160, 5, 255)
+    DrawRect(leftPos, space, widthInfo, height)
+    SetDrawColor(0, 0, 0, 180)
 
     for i = 1, extractCount, 1 do
         DrawRect(leftPos, space * (i + 1) + height * i, widthInfo, height)

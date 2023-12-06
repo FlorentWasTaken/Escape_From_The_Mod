@@ -8,7 +8,7 @@ local function startExtracting(extract)
 end
 
 local function checkCoordDist(xStatic, xEntity)
-    return xStatic - 15 <= xEntity <= xStatic + 15
+    return xStatic - 15 <= xEntity and xEntity <= xStatic + 15
 end
 
 net.Receive("EFTM_raid:net:server:startRaid", function(len)

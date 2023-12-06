@@ -51,6 +51,7 @@ local function loadLanguage()
 			_LANGUAGE = "en_US"
 			return loadLanguage()
 		end
+		EFTM.CONFIG.LANGUAGE = util.JSONToTable(langConfigContent)
 	elseif _LANGUAGE ~= "en_US" then
 		MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo valid language file for %s switching to en_US\n", _LANGUAGE))
 		_LANGUAGE = "en_US"

@@ -6,6 +6,20 @@ local function cancelExtract(ply)
     net.Send(ply)
 end
 
+local function checkLastPlayer()
+    for k, v in ipairs(player.GetAll()) do
+        if IsValid(v) and v.EFTM and not v.EFTM.IN_HIDEOUT then
+            return false
+        end
+    end
+    return true
+end
+
+local function stopRaid()
+    IS_RAID_STARTED = false
+    timer.UnPause("EFTM_raid:timer:server:raidStartup")
+end
+
 net.Receive("EFTM_raid:net:server:startExtracting", function(len, ply)
     local extract = net.ReadUInt(4)
 
@@ -38,6 +52,9 @@ net.Receive("EFTM_raid:net:server:startExtracting", function(len, ply)
             ply:SetPos(pos)
             ply:SetEyeAngles(rot)
             ply.EFTM.IN_HIDEOUT = true
+            if checkLastPlayer() then
+                stopRaid()
+            end
         end
     end)
 end)

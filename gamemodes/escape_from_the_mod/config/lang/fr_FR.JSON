@@ -4,5 +4,9 @@
     },
     "menu": {
 
+    },
+    "notifications": {
+        "raid_begin_soon": "Le raid commence dans 10 secondes",
+        "cant_begin_raid": "Il n'y a pas assez de joueur pour commencer le raid"
     }
 }

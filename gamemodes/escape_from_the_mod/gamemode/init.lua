@@ -41,12 +41,12 @@ end
 local function loadLanguage()
 	local langPath = string.format("gamemodes/escape_from_the_mod/config/lang/%s.JSON", _LANGUAGE or "en_US")
 
-	if file.Exists(langPath, "GAME") && not file.IsDir(langPath, "GAME") then
+	if file.Exists(langPath, "GAME") and not file.IsDir(langPath, "GAME") then
 		local langConfigContent = file.Read(langPath, "GAME")
 
-		if (not langConfigContent or langConfigContent == "") && _LANGUAGE == "en_US" then
+		if (not langConfigContent or langConfigContent == "") and _LANGUAGE == "en_US" then
 			return MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo valid language file\n", _LANGUAGE))
-		elseif (not langConfigContent or langConfigContent == "") && _LANGUAGE ~= "en_US" then
+		elseif (not langConfigContent or langConfigContent == "") and _LANGUAGE ~= "en_US" then
 			MsgC(Color(216, 20, 20), string.format("Escape From The Mod:\nNo valid language file for %s switching to en_US\n", _LANGUAGE))
 			_LANGUAGE = "en_US"
 			return loadLanguage()
@@ -63,10 +63,25 @@ local function loadLanguage()
 	MsgC(Color(0, 200, 0), "Escape From The Mod:\nLanguage has successfully loaded\n")
 end
 
+local function initSql()
+	local path = "gamemodes/escape_from_the_mod/init.sql"
+
+	if not file.Exists(path, "GAME") or file.IsDir(path, "GAME") then
+		return MsgC(Color(216, 20, 20), "Escape From The Mod:\nCan't read init.sql\n")
+	end
+	local data = file.Read(path, "GAME")
+
+	if sql.Query(data) == false then
+		return MsgC(Color(216, 20, 20), "Escape From The Mod:\n" .. sql.LastError())
+	end
+	MsgC(Color(0, 200, 0), "Escape From The Mod:\nDatabase successfully init\n")
+end
+
 hook.Add("Initialize", "EFTM:hook:server:loadSettings", function()
 	loadSettings()
 	loadLanguage()
 	loadItems()
+	initSql()
 end)
 
 HTTP({

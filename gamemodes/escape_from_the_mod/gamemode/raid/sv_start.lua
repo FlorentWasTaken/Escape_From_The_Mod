@@ -1,7 +1,7 @@
-IS_RAID_STARTED = false
-
 util.AddNetworkString("EFTM_raid:net:server:startRaid")
 util.AddNetworkString("EFTM_raid:net:server:stopRaid")
+
+IS_RAID_STARTED = false
 
 local function bringRaidPlayers()
     for _, p in ipairs(player.GetAll()) do
@@ -51,6 +51,7 @@ local function managePlayerSpawn(players, spawns, extracts, spawnCount)
             p.EFTM.EXTRACT_ZONE = currentZone
             net.Start("EFTM_raid:net:server:startRaid")
                 net.WriteString(extracts)
+                net.WriteUInt(EFTM.CONFIG.MAP.raid_duration or 900, 12) -- Raid duration
             net.Send(p)
             currentZone = currentZone + 1
             p:SetPos(Vector(v.x, v.y, v.z))

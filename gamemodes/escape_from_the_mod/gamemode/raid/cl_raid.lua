@@ -1,6 +1,9 @@
 local isExtracting = false
 local extracts = nil
 
+raidDuration = 0
+raidStartTime = 0
+
 local function startExtracting(extract)
     net.Start("EFTM_raid:net:server:startExtracting")
         net.WriteUInt(extract, 4)
@@ -13,6 +16,8 @@ end
 
 net.Receive("EFTM_raid:net:server:startRaid", function(len)
     extracts = util.JSONToTable(net.ReadString())
+    raidDuration = net.ReadUInt(12)
+    raidStartTime = os.time()
 
     timer.Create("EFTM:timer:client:raidTimer", 1, 0, function()
         if isExtracting then return end
@@ -36,4 +41,6 @@ end)
 
 net.Receive("EFTM_raid:net:server:stopRaid", function(len)
     timer.Remove("EFTM:timer:client:raidTimer")
+    raidDuration = 0
+    raidStartTime = 0
 end)

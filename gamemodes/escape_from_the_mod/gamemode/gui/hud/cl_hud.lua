@@ -14,6 +14,11 @@ local materials = {
     Material("eftm/inventory/inventory_box.png") -- normal inventory box
 }
 
+surface.CreateFont("TopRightSmallFont", {
+	font = "Arial", -- Temp font
+	size = 30, -- Temp size
+})
+
 local SetDrawColor = surface.SetDrawColor
 local DrawRect = surface.DrawRect
 local DrawText = surface.DrawText
@@ -115,6 +120,7 @@ local function displayTimeLeft()
     local widthInfo, widthTimer, height = floor(scrw * .12), floor(scrw * .05), scrh * .05
     local space = scrw * .002
     local leftPos = scrw - widthInfo - widthTimer - space * 2
+    local timeLeft = raidStartTime - (os.time() - raidDuration)
 
     SetDrawColor(0, 0, 0, 180)
     DrawRect(leftPos + space + widthInfo, space, widthTimer, height)
@@ -123,6 +129,15 @@ local function displayTimeLeft()
 
     SetDrawColor(109, 160, 5, 255)
     DrawRect(leftPos, space, widthInfo, height)
+    if timeLeft > 0 then
+        SetFont("TopRightSmallFont")
+        local date = os.date("0:%M:%S", timeLeft)
+        local dateWidth, dateHeight = GetTextSize(date)
+
+        SetTextColor(255, 255, 255)
+        SetTextPos(leftPos + widthInfo + space + widthTimer * .5 - dateWidth * .5, height * .5 - dateHeight * .5)
+        DrawText(os.date("0:%M:%S", timeLeft))
+    end
     SetDrawColor(0, 0, 0, 180)
 
     for i = 1, extractCount, 1 do

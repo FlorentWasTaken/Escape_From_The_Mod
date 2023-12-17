@@ -1,5 +1,6 @@
 {
     "hideout_location": {"x": -865, "y": -3, "z": -12767, "w": 180},
+    "raid_duration": 900,
     "extracts": [
         {"name": "roadblock", "spawns": {"1": true, "2": true}, "x": 359, "y": 46, "z": -12799}
     ],

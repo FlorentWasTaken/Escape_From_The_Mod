@@ -1,14 +1,69 @@
 local _player = FindMetaTable("Player")
 
-function _player:getItemByPos(pos)
-    return self.EFTM.INVENTORY[pos]
+Slot = {}
+
+function Slot:new(_type)
+    local obj = {}
+
+    if _type ~= "X" and _type ~= "Y" then return nil end
+
+    setmetatable(obj, self)
+    self.__index = self
+    self.type = _type -- correspond to X or Y
+    self.replacement = nil -- correspond to the item pos in ITEMS table
+    return obj
 end
 
-function _player:removeItem(item)
-    table.RemoveByValue(self.EFTM.INVENTORY, item)
+function _player:getItemByPos(pos, inv)
+    return self.EFTM.INVENTORY[inv].ITEMS[pos]
+end
+
+function _player:removeItem(item, inv)
+    table.RemoveByValue(self.EFTM.INVENTORY[inv].ITEMS, item)
+end
+
+function _player:quickMoveItem(item, inv)
+    if inv == nil then
+        inv = "RIG"
+    elseif inv == "RIG" then
+        inv = "POCKETS"
+    elseif inv == "POCKETS" then
+        inv = "BAG"
+    elseif inv == "BAG" then
+        return false
+    end
+
+    if table.Empty(self.EFTM.INVENTORY[inv].SHAPE) then
+        return self:quickMoveItem(item, inv)
+    end
+    local tbl = self.EFTM.INVENTORY[inv].SHAPE
+    local columnSize = #tbl
+    local sizeX, sizeY = item.horizontal, item.vertical
+
+    if item.vertical > columSize then -- item can't fit in
+        return self:quickMoveItem(item, inv)
+    end
+
+    for k, v in ipairs(tbl) do -- row
+        local rowSize = #v
+
+        for kk, vv in ipairs(v) do -- column
+            if vv.replacement ~= nil then continue end -- item already present here
+            local actualType = vv.type
+
+            if rowSize - kk < item.horizontal then break end -- item can't fit in
+
+            -- TO DO check if every symbol are the same
+        end
+    end
+    return true
 end
 
 hook.Add("PlayerInitialSpawn", "EFTM:hook:server:loadPlayerItems", function(ply, _)
     ply.EFTM = ply.EFTM or {}
-    ply.EFTM.INVENTORY = {}
+    ply.EFTM.INVENTORY = { -- if you want to create empty space use "Z" as type
+        RIG = {ITEMS = {}, SHAPE = {}},
+        POCKETS = {ITEMS = {}, SHAPE = {{Slot:new("X"), Slot:new("Y"), Slot:new("X"), Slot:new("Y")}}}, -- X or Y = 1 square but X and X = rectangle
+        BAG = {ITEMS = {}, SHAPE = {}}
+    }
 end)

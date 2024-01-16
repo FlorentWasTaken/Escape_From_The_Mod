@@ -22,6 +22,21 @@ function _player:removeItem(item, inv)
     table.RemoveByValue(self.EFTM.INVENTORY[inv].ITEMS, item)
 end
 
+local function doesItemFit(tbl, columnSize, rowSize, actualType, sizeX, sizeY, k, kk)
+    for i = k, columnSize, 1 do
+        for ii = kk, rowSize, 1 do
+            local obj = tbl[i][ii]
+
+            if obj and obj.type ~= actualType then
+                return false
+            elseif i - k >= sizeY and ii - kk >= sizeX then -- stop loop if we are checking more than necessary
+                return true
+            end
+        end
+    end
+    return true
+end
+
 function _player:quickMoveItem(item, inv)
     if inv == nil then
         inv = "RIG"
@@ -49,14 +64,14 @@ function _player:quickMoveItem(item, inv)
 
         for kk, vv in ipairs(v) do -- column
             if vv.replacement ~= nil then continue end -- item already present here
-            local actualType = vv.type
-
             if rowSize - kk < item.horizontal then break end -- item can't fit in
 
-            -- TO DO check if every symbol are the same
+            if doesItemFit(tbl, columnSize, rowSize, vv.type, sizeX, sizeY, k, kk) then
+                return true
+            end
         end
     end
-    return true
+    return false
 end
 
 hook.Add("PlayerInitialSpawn", "EFTM:hook:server:loadPlayerItems", function(ply, _)

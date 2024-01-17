@@ -37,6 +37,15 @@ local function doesItemFit(tbl, columnSize, rowSize, actualType, sizeX, sizeY, k
     return true
 end
 
+local function fillSlot(tbl, columnSize, rowSize, typeReplacement, sizeX, sizeY, k, kk)
+    for i = k, columnSize, 1 do
+        for ii = kk, rowSize, 1 do
+            tbl[i][ii].replacement = typeReplacement
+            if i >= sizeY and ii >= sizeX then return end
+        end
+    end
+end
+
 function _player:quickMoveItem(item, inv)
     if inv == nil then
         inv = "RIG"
@@ -67,6 +76,8 @@ function _player:quickMoveItem(item, inv)
             if rowSize - kk < item.horizontal then break end -- item can't fit in
 
             if doesItemFit(tbl, columnSize, rowSize, vv.type, sizeX, sizeY, k, kk) then
+                table.insert(self.EFTM.INVENTORY[inv].inventory, item)
+                fillSlot(tbl, columnSize, rowSize, #self.EFTM.INVENTORY[inv].inventory, sizeX, sizeY, k, kk)
                 return true
             end
         end

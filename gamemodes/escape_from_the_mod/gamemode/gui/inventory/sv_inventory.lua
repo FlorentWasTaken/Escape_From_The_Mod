@@ -82,7 +82,7 @@ function _player:quickMoveItem(item, inv)
             end
         end
     end
-    return false
+    return self:quickMoveItem(item, inv)
 end
 
 hook.Add("PlayerInitialSpawn", "EFTM:hook:server:loadPlayerItems", function(ply, _)

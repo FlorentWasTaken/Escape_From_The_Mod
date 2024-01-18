@@ -21,6 +21,9 @@ include("player/needs/sv_needs.lua")
 include("raid/sv_start.lua")
 include("raid/sv_extract.lua")
 
+-- tests files
+include("tests/init.lua")
+
 local function loadSettings()
 	local map = game.GetMap()
 	local mapPath = string.format("gamemodes/escape_from_the_mod/config/maps/%s.JSON", map)
